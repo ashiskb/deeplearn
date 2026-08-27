@@ -686,8 +686,8 @@ H(neuron) = sigmoid(\sum weight_i \cdot input_i) = sigmoid(f(x))
 <p><a href="figs/ann-01.gvz.png" class="lightbox" data-gallery="quarto-lightbox-gallery-57"><img data-src="figs/ann-01.gvz.png"></a></p>
 <p><span class="math display">\[
 \begin{align}
-netb_1 &amp;=&amp;  1*bw_1 + a_1w_1 + a_2w_3\\
-b_1 &amp;=&amp; \phi(netb_1)
+s_{b_1} &amp;=&amp;  1*bw_1 + a_1w_1 + a_2w_3\\
+b_1 &amp;=&amp; \phi(s_{b_1})
 \end{align}
 \]</span></p>
 </section>
@@ -695,24 +695,24 @@ b_1 &amp;=&amp; \phi(netb_1)
 <h2></h2>
 <p><img data-src="figs/ann-01.gvz.png"> <span class="math display">\[
 \begin{align}
-netb_2 &amp;=&amp; 1*bw_2 + a_1w_2 + a_2w_4\\
-b_2 &amp;=&amp; \phi(netb_2)
+s_{b_2} &amp;=&amp; 1*bw_2 + a_1w_2 + a_2w_4\\
+b_2 &amp;=&amp; \phi(s_{b_2})
 \end{align}
 \]</span></p>
 </section>
 <section id="section-17" class="slide level2 scrollable">
 <h2></h2>
 <p><img data-src="figs/ann-01.gvz.png"> <span class="math display">\[ \begin{align}
-\nonumber netc_1 &amp;=&amp; 1*bw_3 + b_1w_5 + b_2w_6\\
-\nonumber c_1 &amp;=&amp; \phi(netc_1)
+\nonumber s_{c_1} &amp;=&amp; 1*bw_3 + b_1w_5 + b_2w_6\\
+\nonumber c_1 &amp;=&amp; \phi(s_{c_1})
 \end{align}
 \]</span></p>
 </section>
 <section id="section-18" class="slide level2 scrollable">
 <h2></h2>
 <p><img data-src="figs/ann-01.gvz.png"> <span class="math display">\[ \begin{align}
-\nonumber netc_1 &amp;=&amp; 1*bw_3 + b_1w_5 + b_2w_6\\
-\nonumber Z &amp;=&amp; \hat{y} = \phi(netc_1)
+\nonumber s_{c_1} &amp;=&amp; 1*bw_3 + b_1w_5 + b_2w_6\\
+\nonumber c_1 = Z &amp;=&amp; \hat{y} = \phi(s_{c_1})
 \end{align}
 \]</span> * <span class="math inline">\(\hat{y}\)</span> is an estimated predicted value yield at the output layer.</p>
 </section>
@@ -1466,7 +1466,7 @@ w5_\text{new} &amp;=&amp; w5_\text{old} - \alpha\cdot\dfrac{\partial L}{\partial
 </section>
 <section id="lets-code" class="slide level2 scrollable">
 <h2>Let’s code</h2>
-<div id="e0880d14" class="cell" data-execution_count="1">
+<div id="7a748326" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="" aria-label="1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="" aria-label="2"></a><span class="im">from</span> tqdm <span class="im">import</span> tqdm</span>
 <span id="cb1-3"><a href="" aria-label="3"></a><span class="im">import</span> random</span>
@@ -1477,7 +1477,7 @@ w5_\text{new} &amp;=&amp; w5_\text{old} - \alpha\cdot\dfrac{\partial L}{\partial
 </section>
 <section id="section-22" class="slide level2 scrollable">
 <h2></h2>
-<div id="4814aff9" class="cell" data-execution_count="2">
+<div id="1ce39238" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="" aria-label="1"></a>np.random.seed(<span class="dv">42</span>)</span>
 <span id="cb2-2"><a href="" aria-label="2"></a>hidden_size <span class="op">=</span> <span class="dv">2</span></span>
 <span id="cb2-3"><a href="" aria-label="3"></a>input_size <span class="op">=</span> <span class="dv">2</span></span>
@@ -1518,7 +1518,7 @@ w6 =  0.7674347291529088</code></pre>
 </section>
 <section id="section-23" class="slide level2 scrollable">
 <h2></h2>
-<div id="b50ef413" class="cell" data-execution_count="3">
+<div id="bbb6c0df" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="" aria-label="1"></a><span class="co"># Sigmoid Activation Function</span></span>
 <span id="cb4-2"><a href="" aria-label="2"></a><span class="kw">def</span> sigmoid(x):</span>
 <span id="cb4-3"><a href="" aria-label="3"></a>    <span class="co">'''</span></span>
@@ -1538,7 +1538,7 @@ w6 =  0.7674347291529088</code></pre>
 </section>
 <section id="section-25" class="slide level2 scrollable">
 <h2></h2>
-<div id="4361b206" class="cell" data-execution_count="4">
+<div id="633f647b" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="" aria-label="1"></a><span class="co"># Forward Propagation (for visualization)</span></span>
 <span id="cb5-2"><a href="" aria-label="2"></a><span class="kw">def</span> forward_propagation(X):</span>
 <span id="cb5-3"><a href="" aria-label="3"></a>    <span class="kw">global</span> w5, w6, bw3, w1, w2, w3, w4, bw1, bw2</span>
@@ -1561,7 +1561,7 @@ w6 =  0.7674347291529088</code></pre>
 </section>
 <section id="section-27" class="slide level2 scrollable">
 <h2></h2>
-<div id="47a80ad5" class="cell" data-execution_count="5">
+<div id="8e5d37a9" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="" aria-label="1"></a><span class="kw">def</span> backward(c1, sc, b1, sb1, b2, sb2, x, y):</span>
 <span id="cb6-2"><a href="" aria-label="2"></a></span>
 <span id="cb6-3"><a href="" aria-label="3"></a>    <span class="co"># output layer - hidden layer</span></span>
@@ -1587,7 +1587,7 @@ w6 =  0.7674347291529088</code></pre>
 </section>
 <section id="training-utility-the-update-weights-function" class="slide level2 scrollable">
 <h2>Training utility : the update weights function</h2>
-<div id="481a7455" class="cell" data-execution_count="6">
+<div id="2c20bc07" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="" aria-label="1"></a><span class="kw">def</span> update_weights(dw5, dw6, dbw3, dw1, dw2, dw3, dw4, dbw1, dbw2):</span>
 <span id="cb7-2"><a href="" aria-label="2"></a>    <span class="kw">global</span> w5, w6, bw3, w1, w2, w3, w4, bw1, bw2</span>
 <span id="cb7-3"><a href="" aria-label="3"></a></span>
@@ -1606,7 +1606,7 @@ w6 =  0.7674347291529088</code></pre>
 </section>
 <section id="training-loop" class="slide level2 scrollable">
 <h2>Training loop</h2>
-<div id="0411b599" class="cell" data-execution_count="7">
+<div id="ef941e03" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="" aria-label="1"></a><span class="co">#set the learning rate </span></span>
 <span id="cb8-2"><a href="" aria-label="2"></a>alpha <span class="op">=</span> <span class="fl">0.5</span></span>
 <span id="cb8-3"><a href="" aria-label="3"></a></span>
@@ -1668,7 +1668,7 @@ w6 =  -9.456963522142708</code></pre>
 </section>
 <section id="now-let-us-evaluate-the-trained-network" class="slide level2 scrollable">
 <h2>Now, Let us evaluate the trained network</h2>
-<div id="cb38bf8c" class="cell" data-execution_count="8">
+<div id="584d080b" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="" aria-label="1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Evaluation:"</span>)</span>
 <span id="cb10-2"><a href="" aria-label="2"></a></span>
 <span id="cb10-3"><a href="" aria-label="3"></a><span class="cf">for</span> x, target <span class="kw">in</span> <span class="bu">zip</span>(X, y):</span>
