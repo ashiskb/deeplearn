@@ -7,7 +7,7 @@ Some course materials for another semester of Deep Learning course
 
 
 ## Week 2 (08/24 -- 8/28)
-* Lecture slides to follow [week-02/02-intro-to-ANN.html](week-02/02-intro-to-ANN.html)
+* Basics of Artificial Neural Network, Backprop etc. Lecture slides to follow [week-02/02-intro-to-ANN.html](week-02/02-intro-to-ANN.html)
 * Something to practice this week:
   1. Setup Python 3.12+
   2. Create Virtual Environment named `venv-week1`
@@ -21,3 +21,9 @@ Some course materials for another semester of Deep Learning course
   6. How many different countries are listed in [A.csv](datasets/A.csv)?
   7. Please briefly describe each of the 3 datasets (i.e., what the datasets are about)
   8. Care to explore more of the datasets?
+
+## Week 3 (08/31 -- 9/4)
+* Basics of Artificial Neural Network, Backprop etc. (continued from last week) Lecture slides to follow [week-02/02-intro-to-ANN.html](week-02/02-intro-to-ANN.html)
+* What are the compute Frameworks for Deep Learning tasks [week-03/compute-frameworks-intro.html](week-03/compute-frameworks-intro.html)
+* Some example coding tasks to follow from class
+  * Can you do differentiation?
