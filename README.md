@@ -27,3 +27,6 @@ Some course materials for another semester of Deep Learning course
 * What are the compute Frameworks for Deep Learning tasks [week-03/compute-frameworks-intro.html](week-03/compute-frameworks-intro.html)
 * Some example coding tasks to follow from class
   * Can you do differentiation?
+
+## Week 4 (9/08 -- 9/11), excluding 9/7 for the Labor day holiday
+* Some coding examples, and the regression task with PyTorch [lecture slide](week-04/couple-of-scenarios-and-codes.html)
