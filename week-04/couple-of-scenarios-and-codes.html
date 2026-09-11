@@ -231,7 +231,7 @@ Ashis Kumer Biswas, Ph.D.
 <section id="task-b" class="slide level2 scrollable">
 <h2>Task B</h2>
 <p>Consider the following simplest artificial neural network, containing only two layers: inputer layer and output layer. The input layer takes a 2 dimensional input, <span class="math inline">\(x_1, x_2\)</span>, and at the output layer there is a single neuron.</p>
-<p><a href="_figs/xor-02.gvz.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img data-src="_figs/xor-02.gvz.png"></a></p>
+<p><a href="figs/xor-02.gvz.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img data-src="figs/xor-02.gvz.png"></a></p>
 <p>Also, considering the network uses a bias, <span class="math inline">\(b=1\)</span>, and sigmoid activation, i.e., <span class="math inline">\(\sigma(x) = \dfrac{1}{1+e^{-x}}\)</span>.</p>
 <p>So, there are only three learnable weights in the network:</p>
 <ul>
@@ -262,7 +262,7 @@ Ashis Kumer Biswas, Ph.D.
 </section>
 <section id="task-b-1" class="slide level2 scrollable">
 <h2>Task B</h2>
-<div id="5b164082" class="cell" data-execution_count="1">
+<div id="65787a3f" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="" aria-label="1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb3-2"><a href="" aria-label="2"></a><span class="co">#numpy library as a function called exp() which you can call like np.exp(x)</span></span>
 <span id="cb3-3"><a href="" aria-label="3"></a><span class="kw">def</span> forward(x, b<span class="op">=</span><span class="dv">1</span>):</span>
@@ -301,15 +301,15 @@ input [5,3] -&gt; output: 0.8807970779778823</code></pre>
 <section id="task-c" class="slide level2 scrollable">
 <h2>Task C</h2>
 <ul>
-<li>Now that you have defined the <code>forward()</code> function in Task B, use it to compute the sum of squared error after forward passing all the 4 data samples from the given dataset, <a href="_datasets/my_dataset.csv"><code>_datasets/my_dataset.csv</code></a>.
+<li>Now that you have defined the <code>forward()</code> function in Task B, use it to compute the sum of squared error after forward passing all the 4 data samples from the given dataset, <a href="datasets/my_dataset.csv"><code>datasets/my_dataset.csv</code></a>.
 <ul>
 <li>Please note: the dataset contains n=4 samples. Each sample is 2 dimensional, meaning each has 4 features: <span class="math inline">\(x_1, x_2\)</span>. The 3rd column is the ground true target, <span class="math inline">\(y\)</span> which you will be using to measure the error.</li>
 </ul></li>
 <li>Hint: sum of squared error for <span class="math inline">\(n\)</span> samples, <span class="math inline">\(SSE = \sum_{i=1}^n (y_i - \hat{y}_i)^2\)</span>, where, <span class="math inline">\(y_i\)</span> is the ground true target value for the <span class="math inline">\(i\)</span>-th sample, and <span class="math inline">\(\hat{y}_i\)</span> is the predicted (i.e., forward passed output value from our network.</li>
 </ul>
-<div id="d6b30a7f" class="cell" data-execution_count="2">
+<div id="41ab9abf" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="" aria-label="1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb5-2"><a href="" aria-label="2"></a>data <span class="op">=</span> pd.read_csv(<span class="st">'_datasets/my_dataset.csv'</span>,header<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb5-2"><a href="" aria-label="2"></a>data <span class="op">=</span> pd.read_csv(<span class="st">'datasets/my_dataset.csv'</span>,header<span class="op">=</span><span class="dv">0</span>)</span>
 <span id="cb5-3"><a href="" aria-label="3"></a></span>
 <span id="cb5-4"><a href="" aria-label="4"></a><span class="bu">print</span>(data)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -323,12 +323,12 @@ input [5,3] -&gt; output: 0.8807970779778823</code></pre>
 </section>
 <section id="task-c-1" class="slide level2 scrollable">
 <h2>Task C</h2>
-<div id="4b9e7194" class="cell" data-execution_count="3">
+<div id="571e172a" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="" aria-label="1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb7-2"><a href="" aria-label="2"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb7-3"><a href="" aria-label="3"></a></span>
 <span id="cb7-4"><a href="" aria-label="4"></a><span class="co">#numpy library as a function called exp() which you can call like np.exp(x)</span></span>
-<span id="cb7-5"><a href="" aria-label="5"></a><span class="kw">def</span> SSE(dataset_file<span class="op">=</span><span class="st">'dataset/my_dataset.csv'</span>):</span>
+<span id="cb7-5"><a href="" aria-label="5"></a><span class="kw">def</span> SSE(dataset_file<span class="op">=</span><span class="st">'datasets/my_dataset.csv'</span>):</span>
 <span id="cb7-6"><a href="" aria-label="6"></a>    <span class="co">"""Compute and return the SSE of your artificial neural network based on the 4 data samples</span></span>
 <span id="cb7-7"><a href="" aria-label="7"></a><span class="co">    given in the file dataset_file csv.</span></span>
 <span id="cb7-8"><a href="" aria-label="8"></a><span class="co">    The function must return the SSE score.</span></span>
@@ -353,18 +353,18 @@ input [5,3] -&gt; output: 0.8807970779778823</code></pre>
 </section>
 <section id="task-c-test-on-two-datasets" class="slide level2 scrollable">
 <h2>Task C – Test on two datasets</h2>
-<p>We have 2 files: - <a href="_datasets/my_dataset.csv">_datasets/my_dataset.csv</a> - _datasets/my_dataset2.csv](_datasets/my_dataset2.csv)</p>
-<div id="0686d3d8" class="cell" data-execution_count="4">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="" aria-label="1"></a><span class="bu">print</span>(<span class="ss">f'SSE of the network on _datasets/my_dataset.csv'</span>)</span>
-<span id="cb8-2"><a href="" aria-label="2"></a><span class="bu">print</span>(SSE(dataset_file<span class="op">=</span><span class="st">"_datasets/my_dataset.csv"</span>))</span>
+<p>We have 2 files: - <a href="datasets/my_dataset.csv">datasets/my_dataset.csv</a> - <a href="datasets/my_dataset2.csv">datasets/my_dataset2.csv</a></p>
+<div id="2739fd0b" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="" aria-label="1"></a><span class="bu">print</span>(<span class="ss">f'SSE of the network on datasets/my_dataset.csv'</span>)</span>
+<span id="cb8-2"><a href="" aria-label="2"></a><span class="bu">print</span>(SSE(dataset_file<span class="op">=</span><span class="st">"datasets/my_dataset.csv"</span>))</span>
 <span id="cb8-3"><a href="" aria-label="3"></a><span class="bu">print</span>(<span class="st">'---'</span>)</span>
-<span id="cb8-4"><a href="" aria-label="4"></a><span class="bu">print</span>(<span class="ss">f'SSE of the network on _datasets/my_dataset2.csv'</span>)</span>
-<span id="cb8-5"><a href="" aria-label="5"></a><span class="bu">print</span>(SSE(dataset_file<span class="op">=</span><span class="st">"_datasets/my_dataset2.csv"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb8-4"><a href="" aria-label="4"></a><span class="bu">print</span>(<span class="ss">f'SSE of the network on datasets/my_dataset2.csv'</span>)</span>
+<span id="cb8-5"><a href="" aria-label="5"></a><span class="bu">print</span>(SSE(dataset_file<span class="op">=</span><span class="st">"datasets/my_dataset2.csv"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>SSE of the network on _datasets/my_dataset.csv
+<pre><code>SSE of the network on datasets/my_dataset.csv
 1.0346259786988001
 ---
-SSE of the network on _datasets/my_dataset2.csv
+SSE of the network on datasets/my_dataset2.csv
 5.302196981667789</code></pre>
 </div>
 </div>
@@ -376,7 +376,7 @@ SSE of the network on _datasets/my_dataset2.csv
 <ul>
 <li>You can use the <code>numpy.exp()</code> function to compute the exponent of <span class="math inline">\(x\)</span>:</li>
 </ul>
-<div id="147362ed" class="cell" data-execution_count="5">
+<div id="d0c93284" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="" aria-label="1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb10-2"><a href="" aria-label="2"></a></span>
 <span id="cb10-3"><a href="" aria-label="3"></a><span class="kw">def</span> sigma(x):</span>
@@ -396,7 +396,7 @@ SSE of the network on _datasets/my_dataset2.csv
 </section>
 <section id="task-d-solution" class="slide level2 scrollable">
 <h2>Task D – solution</h2>
-<div id="97bcc962" class="cell" data-execution_count="6">
+<div id="1296b52b" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="" aria-label="1"></a><span class="kw">def</span> derivative_of_sigma(x):</span>
 <span id="cb11-2"><a href="" aria-label="2"></a>    <span class="co">"""This function computes the derivative of sigma function at point x.</span></span>
 <span id="cb11-3"><a href="" aria-label="3"></a><span class="co">    Make sure the function returns the result.</span></span>
@@ -409,7 +409,7 @@ SSE of the network on _datasets/my_dataset2.csv
 </section>
 <section id="task-d-verfication" class="slide level2 scrollable">
 <h2>Task D (verfication)</h2>
-<div id="4aa41bf6" class="cell" data-execution_count="7">
+<div id="4d8a2aa7" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="" aria-label="1"></a><span class="bu">print</span>(<span class="ss">f'sigma(0.5) = </span><span class="sc">{</span>sigma(<span class="fl">0.5</span>)<span class="sc">}</span><span class="ss">, expected: </span><span class="sc">{</span><span class="fl">0.622459</span><span class="sc">}</span><span class="ss">'</span>)</span>
 <span id="cb12-2"><a href="" aria-label="2"></a><span class="bu">print</span>(<span class="ss">f'sigma(0.25) = </span><span class="sc">{</span>sigma(<span class="fl">0.25</span>)<span class="sc">}</span><span class="ss">, expected: </span><span class="sc">{</span><span class="fl">0.5622</span><span class="sc">}</span><span class="ss">'</span>)</span>
 <span id="cb12-3"><a href="" aria-label="3"></a><span class="bu">print</span>(<span class="ss">f'sigma(0) = </span><span class="sc">{</span>sigma(<span class="dv">0</span>)<span class="sc">}</span><span class="ss">, expected: </span><span class="sc">{</span><span class="fl">0.5</span><span class="sc">}</span><span class="ss">'</span>)</span>
@@ -424,7 +424,7 @@ sigma(-1) = 0.2689414213699951, expected: 0.26894</code></pre>
 </section>
 <section id="task-e-a-regression-task-with-pytorch" class="slide level2 scrollable">
 <h2>Task E – A Regression task with PyTorch</h2>
-<p>In this task you are given a simple regression dataset located at <a href="_datasets/q6_regression.csv"><code>_datasets/q6_regression.csv</code></a>. It has 100 samples. Each sample is 5 dimensional (i.e., having 5 input features namely <code>x0</code>, <code>x1</code>, <code>x2</code>, <code>x3</code>, and <code>x4</code>). The target <code>y</code> is the dependent variable (feature) that you are going to map with the input features. And, you are going to build the following Artificial Neural Network to model it. Also, we are going to use the <code>PyTorch</code> compute framework. If this is your first time doing something like this, no worries. I’ll walk you through the process.</p>
+<p>In this task you are given a simple regression dataset located at <a href="datasets/q6_regression.csv"><code>datasets/q6_regression.csv</code></a>. It has 100 samples. Each sample is 5 dimensional (i.e., having 5 input features namely <code>x0</code>, <code>x1</code>, <code>x2</code>, <code>x3</code>, and <code>x4</code>). The target <code>y</code> is the dependent variable (feature) that you are going to map with the input features. And, you are going to build the following Artificial Neural Network to model it. Also, we are going to use the <code>PyTorch</code> compute framework. If this is your first time doing something like this, no worries. I’ll walk you through the process.</p>
 <p>I hope you are now well aware of what a regression task is:</p>
 <blockquote>
 <p>A regression task is a type of supervised learning problem where the goal is to predict a continuous numerical value (rather than a discrete category) based on the input features.</p>
@@ -451,7 +451,7 @@ sigma(-1) = 0.2689414213699951, expected: 0.26894</code></pre>
 </section>
 <section id="task-e-step-1-import-necessary-packages" class="slide level2 scrollable">
 <h2>Task E, Step 1: Import necessary packages</h2>
-<div id="37913165" class="cell" data-execution_count="8">
+<div id="6e6004bd" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="" aria-label="1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb14-2"><a href="" aria-label="2"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb14-3"><a href="" aria-label="3"></a></span>
@@ -539,14 +539,14 @@ sigma(-1) = 0.2689414213699951, expected: 0.26894</code></pre>
 <h2>Let’s define the <code>Q6_Regression_Dataset</code> class</h2>
 <ul>
 <li>This class must be a subclass of the <code>Dataset</code> class</li>
-<li>The <a href="_datasets/q6_regression.csv"><code>Q6_Regression_Dataset</code></a> should be able to read from a csv file:
+<li>The <a href="datasets/q6_regression.csv"><code>Q6_Regression_Dataset</code></a> should be able to read from a csv file:
 <ul>
 <li>In the constructor, <code>__init__</code> method, you can see we simply read from the dataset. Here, you can pass any data/feature transformation function to work as a preprocessor. We are ignoring that in this task.</li>
 <li>We implemented the <code>__len___()</code> member function that simply returns number of samples in the dataset.</li>
 <li>We implemented the <code>__getitem__()</code> member function that takes an integer index <code>idx</code>, and returns the sample at that index. Here, we are open to return the specific data sample however we want. But, for this task, we are returning the samples as a dictionary so that it’s easier to interpret during training. Please note: the values were converted to <code>torch.tensor</code> type so that PyTorch can send it to GPU easily.</li>
 </ul></li>
 </ul>
-<div id="5301cc1f" class="cell" data-execution_count="9">
+<div id="b43e7c6f" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="" aria-label="1"></a><span class="kw">class</span> Q6_Regression_Dataset(Dataset):</span>
 <span id="cb17-2"><a href="" aria-label="2"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, csv_file, transform<span class="op">=</span><span class="va">None</span>):</span>
 <span id="cb17-3"><a href="" aria-label="3"></a>        <span class="co">"""</span></span>
@@ -593,7 +593,7 @@ sigma(-1) = 0.2689414213699951, expected: 0.26894</code></pre>
 <li>You must define the <code>forward</code> function that would demonstrate a forward propagation given a data sample, <code>x</code>.</li>
 </ul></li>
 </ul>
-<div id="f27ec598" class="cell" data-execution_count="10">
+<div id="dba320b7" class="cell" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="" aria-label="1"></a><span class="im">import</span> torch</span>
 <span id="cb19-2"><a href="" aria-label="2"></a><span class="im">import</span> torch.nn <span class="im">as</span> nn</span>
 <span id="cb19-3"><a href="" aria-label="3"></a></span>
@@ -680,7 +680,7 @@ y = xW^T + b
 <section id="our-regression-network-we-have-just-defined" class="slide level2 scrollable">
 <h2>Our Regression network we have just defined</h2>
 <p>Here’s a simple diagram of your regression network:</p>
-<p><a href="_figs/Q6_Regression_Net.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img data-src="_figs/Q6_Regression_Net.png"></a></p>
+<p><a href="figs/Q6_Regression_Net.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img data-src="figs/Q6_Regression_Net.png"></a></p>
 <ul>
 <li><strong>Blue circles</strong> → Input layer (5 features)</li>
 <li><strong>Green circles</strong> → Hidden layer 1 (10 neurons, <strong>Sigmoid</strong>)</li>
@@ -694,7 +694,7 @@ y = xW^T + b
 </section>
 <section id="step-1-instantiate-the-network-of-the-q6_regression_net-type" class="slide level2 scrollable">
 <h2>Step 1: Instantiate the network of the <code>Q6_Regression_Net</code> type</h2>
-<div id="de120790" class="cell" data-execution_count="11">
+<div id="6dce108c" class="cell" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="" aria-label="1"></a><span class="co">#Let's instantiate our model</span></span>
 <span id="cb20-2"><a href="" aria-label="2"></a>model <span class="op">=</span> Q6_Regression_Net()</span>
 <span id="cb20-3"><a href="" aria-label="3"></a></span>
@@ -718,7 +718,7 @@ y = xW^T + b
 <li>Here is a list <a href="https://docs.pytorch.org/cppdocs/api/nn/loss.html">https://docs.pytorch.org/cppdocs/api/nn/loss.html</a></li>
 </ul></li>
 </ul>
-<div id="98c93b1f" class="cell" data-execution_count="12">
+<div id="c8d4304a" class="cell" data-execution_count="12">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="" aria-label="1"></a><span class="co">#Reference: https://docs.pytorch.org/docs/stable/generated/torch.nn.MSELoss.html</span></span>
 <span id="cb22-2"><a href="" aria-label="2"></a>criterion <span class="op">=</span> nn.MSELoss()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
@@ -728,16 +728,16 @@ y = xW^T + b
 <ul>
 <li>Here is a list of optimizers you can choose from <a href="https://docs.pytorch.org/docs/2.14/optim.html">https://docs.pytorch.org/docs/2.14/optim.html</a></li>
 </ul>
-<div id="1b946688" class="cell" data-execution_count="13">
+<div id="ab99cc3b" class="cell" data-execution_count="13">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="" aria-label="1"></a><span class="co"># Gradient descent optimizer, with learning rate,`lr`</span></span>
 <span id="cb23-2"><a href="" aria-label="2"></a>optimizer <span class="op">=</span> torch.optim.SGD(model.parameters(), lr<span class="op">=</span><span class="fl">0.01</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="step-4-prepare-the-dataset-and-data_loaders-for-training-and-testing" class="slide level2 scrollable">
 <h2>Step 4: Prepare the dataset and data_loaders for training and testing</h2>
-<div id="fa18fd75" class="cell" data-execution_count="14">
+<div id="ad0f05d5" class="cell" data-execution_count="14">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="" aria-label="1"></a><span class="co"># Get the dataset ready for training</span></span>
-<span id="cb24-2"><a href="" aria-label="2"></a>full_dataset <span class="op">=</span> Q6_Regression_Dataset(csv_file<span class="op">=</span><span class="st">'_datasets/q6_regression.csv'</span>)</span>
+<span id="cb24-2"><a href="" aria-label="2"></a>full_dataset <span class="op">=</span> Q6_Regression_Dataset(csv_file<span class="op">=</span><span class="st">'datasets/q6_regression.csv'</span>)</span>
 <span id="cb24-3"><a href="" aria-label="3"></a></span>
 <span id="cb24-4"><a href="" aria-label="4"></a></span>
 <span id="cb24-5"><a href="" aria-label="5"></a><span class="co"># Define the lengths for the splits (e.g., 80 for training, 20 for validation)</span></span>
@@ -760,7 +760,7 @@ y = xW^T + b
 <p>when backprop consumes entire training set once in updating the weights of the network, that is <strong>one epoch</strong></p>
 </blockquote>
 <p>The following training loop runs for <code>num_epochs</code> time epochs.</p>
-<div id="33016ca7" class="cell" data-execution_count="15">
+<div id="6af194f2" class="cell" data-execution_count="15">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="" aria-label="1"></a><span class="co"># Now, the training iterations begin below</span></span>
 <span id="cb25-2"><a href="" aria-label="2"></a>num_epochs <span class="op">=</span> <span class="dv">100</span></span>
 <span id="cb25-3"><a href="" aria-label="3"></a><span class="cf">for</span> epoch <span class="kw">in</span> <span class="bu">range</span>(num_epochs):</span>
@@ -788,108 +788,106 @@ y = xW^T + b
 <span id="cb25-25"><a href="" aria-label="25"></a></span>
 <span id="cb25-26"><a href="" aria-label="26"></a>    <span class="bu">print</span>(<span class="ss">f'Epoch [</span><span class="sc">{</span>epoch<span class="op">+</span><span class="dv">1</span><span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>num_epochs<span class="sc">}</span><span class="ss">], Loss: </span><span class="sc">{</span>loss<span class="sc">.</span>item()<span class="sc">:.4f}</span><span class="ss">'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Epoch [1/100], Loss: 6953.4141
-Epoch [2/100], Loss: 5846.4082
-Epoch [3/100], Loss: 13249.5244
-Epoch [4/100], Loss: 14942.9531</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Epoch [5/100], Loss: 7088.4478
-Epoch [6/100], Loss: 12445.8789
-Epoch [7/100], Loss: 5192.5620
-Epoch [8/100], Loss: 8217.3262
-Epoch [9/100], Loss: 4957.6499
-Epoch [10/100], Loss: 6955.4707
-Epoch [11/100], Loss: 4607.6646
-Epoch [12/100], Loss: 10216.6611
-Epoch [13/100], Loss: 11418.8447
-Epoch [14/100], Loss: 11014.1357
-Epoch [15/100], Loss: 12017.7676
-Epoch [16/100], Loss: 7635.2329
-Epoch [17/100], Loss: 4468.0293
-Epoch [18/100], Loss: 10456.6035
-Epoch [19/100], Loss: 25409.3340
-Epoch [20/100], Loss: 5861.4805
-Epoch [21/100], Loss: 11800.3867
-Epoch [22/100], Loss: 14577.7471
-Epoch [23/100], Loss: 17573.8105
-Epoch [24/100], Loss: 3272.3267
-Epoch [25/100], Loss: 9180.8770
-Epoch [26/100], Loss: 11399.8330
-Epoch [27/100], Loss: 21086.2051
-Epoch [28/100], Loss: 11783.2549
-Epoch [29/100], Loss: 12187.5996
-Epoch [30/100], Loss: 3217.5654
-Epoch [31/100], Loss: 6670.3354
-Epoch [32/100], Loss: 19561.4980
-Epoch [33/100], Loss: 4731.4072
-Epoch [34/100], Loss: 23112.2891
-Epoch [35/100], Loss: 11361.7041
-Epoch [36/100], Loss: 20571.9609
-Epoch [37/100], Loss: 13599.2275
-Epoch [38/100], Loss: 16019.2324
-Epoch [39/100], Loss: 3971.9543
-Epoch [40/100], Loss: 24822.4609
-Epoch [41/100], Loss: 19230.4219
-Epoch [42/100], Loss: 3389.7483
-Epoch [43/100], Loss: 18579.9688
-Epoch [44/100], Loss: 4308.2427
-Epoch [45/100], Loss: 14409.2666
-Epoch [46/100], Loss: 17977.4180
-Epoch [47/100], Loss: 11555.3984
-Epoch [48/100], Loss: 7193.0400
-Epoch [49/100], Loss: 18357.2715
-Epoch [50/100], Loss: 9954.5322
-Epoch [51/100], Loss: 7560.5205
-Epoch [52/100], Loss: 16766.7617
-Epoch [53/100], Loss: 9457.4072
-Epoch [54/100], Loss: 5712.9604
-Epoch [55/100], Loss: 16631.1523
-Epoch [56/100], Loss: 13962.8223
-Epoch [57/100], Loss: 12389.3164
-Epoch [58/100], Loss: 12312.7529
-Epoch [59/100], Loss: 7090.9971
-Epoch [60/100], Loss: 12728.2432
-Epoch [61/100], Loss: 13423.6445
-Epoch [62/100], Loss: 9110.4043
-Epoch [63/100], Loss: 7914.8716
-Epoch [64/100], Loss: 11218.4570
-Epoch [65/100], Loss: 8523.2744
-Epoch [66/100], Loss: 6646.1650
-Epoch [67/100], Loss: 22783.8711
-Epoch [68/100], Loss: 7329.0298
-Epoch [69/100], Loss: 9210.3066
-Epoch [70/100], Loss: 7495.5264
-Epoch [71/100], Loss: 23695.1230
-Epoch [72/100], Loss: 1541.2633
-Epoch [73/100], Loss: 7959.9023
-Epoch [74/100], Loss: 5634.5581
-Epoch [75/100], Loss: 12177.2549
-Epoch [76/100], Loss: 6406.6846
-Epoch [77/100], Loss: 5417.8252
-Epoch [78/100], Loss: 7443.2207
-Epoch [79/100], Loss: 4883.8320
-Epoch [80/100], Loss: 7202.8677
-Epoch [81/100], Loss: 3931.1096
-Epoch [82/100], Loss: 11619.0137
-Epoch [83/100], Loss: 4814.7261
-Epoch [84/100], Loss: 23588.7988
-Epoch [85/100], Loss: 6557.8452
-Epoch [86/100], Loss: 6969.2275
-Epoch [87/100], Loss: 10801.9844
-Epoch [88/100], Loss: 13225.4814
-Epoch [89/100], Loss: 6488.6641
-Epoch [90/100], Loss: 26467.4648
-Epoch [91/100], Loss: 19942.4844
-Epoch [92/100], Loss: 3223.5625
-Epoch [93/100], Loss: 5919.5361
-Epoch [94/100], Loss: 19317.0156
-Epoch [95/100], Loss: 7066.7661
-Epoch [96/100], Loss: 7778.5186
-Epoch [97/100], Loss: 8799.3125
-Epoch [98/100], Loss: 4529.3428
-Epoch [99/100], Loss: 6155.7417
-Epoch [100/100], Loss: 7503.5352</code></pre>
+<pre><code>Epoch [1/100], Loss: 15423.6504
+Epoch [2/100], Loss: 9076.6250
+Epoch [3/100], Loss: 8901.9395
+Epoch [4/100], Loss: 13833.5166
+Epoch [5/100], Loss: 5198.8213
+Epoch [6/100], Loss: 19013.6016
+Epoch [7/100], Loss: 12772.3555
+Epoch [8/100], Loss: 5695.5962
+Epoch [9/100], Loss: 7937.1274
+Epoch [10/100], Loss: 1907.4340
+Epoch [11/100], Loss: 6982.6577
+Epoch [12/100], Loss: 6001.9839
+Epoch [13/100], Loss: 9070.9248
+Epoch [14/100], Loss: 12083.5586
+Epoch [15/100], Loss: 1725.5800
+Epoch [16/100], Loss: 7132.5488
+Epoch [17/100], Loss: 8021.6094
+Epoch [18/100], Loss: 11782.7939
+Epoch [19/100], Loss: 9401.0830
+Epoch [20/100], Loss: 11908.7422
+Epoch [21/100], Loss: 14438.1729
+Epoch [22/100], Loss: 7724.8779
+Epoch [23/100], Loss: 17621.1523
+Epoch [24/100], Loss: 5192.0498
+Epoch [25/100], Loss: 4540.6182
+Epoch [26/100], Loss: 9021.3271
+Epoch [27/100], Loss: 10383.9668
+Epoch [28/100], Loss: 4878.5093
+Epoch [29/100], Loss: 10576.5469
+Epoch [30/100], Loss: 8729.5361
+Epoch [31/100], Loss: 10597.6602
+Epoch [32/100], Loss: 9542.0059
+Epoch [33/100], Loss: 7079.8052
+Epoch [34/100], Loss: 3250.4302
+Epoch [35/100], Loss: 8664.3047
+Epoch [36/100], Loss: 2749.2935
+Epoch [37/100], Loss: 6044.1025
+Epoch [38/100], Loss: 10740.3350
+Epoch [39/100], Loss: 17827.8789
+Epoch [40/100], Loss: 5158.6816
+Epoch [41/100], Loss: 4932.3682
+Epoch [42/100], Loss: 21280.0078
+Epoch [43/100], Loss: 14030.6885
+Epoch [44/100], Loss: 17062.7754
+Epoch [45/100], Loss: 9788.8320
+Epoch [46/100], Loss: 3418.7925
+Epoch [47/100], Loss: 6904.1509
+Epoch [48/100], Loss: 10355.6025
+Epoch [49/100], Loss: 8313.6768
+Epoch [50/100], Loss: 8236.9307
+Epoch [51/100], Loss: 11829.8018
+Epoch [52/100], Loss: 9485.9102
+Epoch [53/100], Loss: 5810.8335
+Epoch [54/100], Loss: 6717.0186
+Epoch [55/100], Loss: 10722.0723
+Epoch [56/100], Loss: 10222.5996
+Epoch [57/100], Loss: 21859.8809
+Epoch [58/100], Loss: 4726.5010
+Epoch [59/100], Loss: 5507.1968
+Epoch [60/100], Loss: 5191.8105
+Epoch [61/100], Loss: 4660.7354
+Epoch [62/100], Loss: 7651.6997
+Epoch [63/100], Loss: 6491.4365
+Epoch [64/100], Loss: 10417.6836
+Epoch [65/100], Loss: 9016.4883
+Epoch [66/100], Loss: 4183.7715
+Epoch [67/100], Loss: 3090.7324
+Epoch [68/100], Loss: 6229.9482
+Epoch [69/100], Loss: 9037.6816
+Epoch [70/100], Loss: 8899.5957
+Epoch [71/100], Loss: 7124.8481
+Epoch [72/100], Loss: 11281.2227
+Epoch [73/100], Loss: 4253.7422
+Epoch [74/100], Loss: 14427.3789
+Epoch [75/100], Loss: 4788.8335
+Epoch [76/100], Loss: 10858.7832
+Epoch [77/100], Loss: 16262.5469
+Epoch [78/100], Loss: 5857.7393
+Epoch [79/100], Loss: 8035.3872
+Epoch [80/100], Loss: 10236.5039
+Epoch [81/100], Loss: 3845.4714
+Epoch [82/100], Loss: 9772.0166
+Epoch [83/100], Loss: 17665.6406
+Epoch [84/100], Loss: 5860.6484
+Epoch [85/100], Loss: 10731.2578
+Epoch [86/100], Loss: 5132.6445
+Epoch [87/100], Loss: 13364.6230
+Epoch [88/100], Loss: 9667.7129
+Epoch [89/100], Loss: 16780.5078
+Epoch [90/100], Loss: 7854.8838
+Epoch [91/100], Loss: 17054.0508
+Epoch [92/100], Loss: 8283.2607
+Epoch [93/100], Loss: 12672.7148
+Epoch [94/100], Loss: 13695.3496
+Epoch [95/100], Loss: 18688.3750
+Epoch [96/100], Loss: 5159.3369
+Epoch [97/100], Loss: 19534.6367
+Epoch [98/100], Loss: 8766.8047
+Epoch [99/100], Loss: 11085.8564
+Epoch [100/100], Loss: 6966.0615</code></pre>
 </div>
 </div>
 </section>
@@ -898,10 +896,10 @@ Epoch [100/100], Loss: 7503.5352</code></pre>
 <blockquote>
 <p>In order to evaluate or make predictions with a trained pytorch model, you have to set it’s mode to eval()</p>
 </blockquote>
-<div id="7fc497c2" class="cell" data-execution_count="16">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="" aria-label="1"></a><span class="co">#Set the model into evaluation model. No further "accidental" weight adjustments won't happen in this mode.</span></span>
-<span id="cb28-2"><a href="" aria-label="2"></a>model.<span class="bu">eval</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="34">
+<div id="f03c481b" class="cell" data-execution_count="16">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="" aria-label="1"></a><span class="co">#Set the model into evaluation model. No further "accidental" weight adjustments won't happen in this mode.</span></span>
+<span id="cb27-2"><a href="" aria-label="2"></a>model.<span class="bu">eval</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="40">
 <pre><code>Q6_Regression_Net(
   (fc1): Linear(in_features=5, out_features=10, bias=True)
   (fc2): Linear(in_features=10, out_features=3, bias=True)
@@ -911,24 +909,24 @@ Epoch [100/100], Loss: 7503.5352</code></pre>
 )</code></pre>
 </div>
 </div>
-<div id="c8ae44f6" class="cell" data-execution_count="17">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="" aria-label="1"></a>loss <span class="op">=</span> <span class="dv">0</span> <span class="co">#total MSE score</span></span>
-<span id="cb30-2"><a href="" aria-label="2"></a><span class="cf">with</span> torch.no_grad():</span>
-<span id="cb30-3"><a href="" aria-label="3"></a>    <span class="co"># Your evaluation code here</span></span>
-<span id="cb30-4"><a href="" aria-label="4"></a>    <span class="cf">for</span> a_batch <span class="kw">in</span> test_dataloader:</span>
-<span id="cb30-5"><a href="" aria-label="5"></a>        batch_features <span class="op">=</span> a_batch[<span class="st">'features'</span>]</span>
-<span id="cb30-6"><a href="" aria-label="6"></a>        batch_labels <span class="op">=</span> a_batch[<span class="st">'labels'</span>]</span>
-<span id="cb30-7"><a href="" aria-label="7"></a></span>
-<span id="cb30-8"><a href="" aria-label="8"></a>        <span class="co"># Forward pass the batch</span></span>
-<span id="cb30-9"><a href="" aria-label="9"></a>        outputs <span class="op">=</span> model(batch_features)</span>
-<span id="cb30-10"><a href="" aria-label="10"></a></span>
-<span id="cb30-11"><a href="" aria-label="11"></a>        <span class="co">#Calculate &amp; aggregate loss (i.e., error) based on the ground true labels current model outputs</span></span>
-<span id="cb30-12"><a href="" aria-label="12"></a>        loss <span class="op">+=</span> criterion(outputs, batch_labels)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="e0d89a9e" class="cell" data-execution_count="17">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="" aria-label="1"></a>loss <span class="op">=</span> <span class="dv">0</span> <span class="co">#total MSE score</span></span>
+<span id="cb29-2"><a href="" aria-label="2"></a><span class="cf">with</span> torch.no_grad():</span>
+<span id="cb29-3"><a href="" aria-label="3"></a>    <span class="co"># Your evaluation code here</span></span>
+<span id="cb29-4"><a href="" aria-label="4"></a>    <span class="cf">for</span> a_batch <span class="kw">in</span> test_dataloader:</span>
+<span id="cb29-5"><a href="" aria-label="5"></a>        batch_features <span class="op">=</span> a_batch[<span class="st">'features'</span>]</span>
+<span id="cb29-6"><a href="" aria-label="6"></a>        batch_labels <span class="op">=</span> a_batch[<span class="st">'labels'</span>]</span>
+<span id="cb29-7"><a href="" aria-label="7"></a></span>
+<span id="cb29-8"><a href="" aria-label="8"></a>        <span class="co"># Forward pass the batch</span></span>
+<span id="cb29-9"><a href="" aria-label="9"></a>        outputs <span class="op">=</span> model(batch_features)</span>
+<span id="cb29-10"><a href="" aria-label="10"></a></span>
+<span id="cb29-11"><a href="" aria-label="11"></a>        <span class="co">#Calculate &amp; aggregate loss (i.e., error) based on the ground true labels current model outputs</span></span>
+<span id="cb29-12"><a href="" aria-label="12"></a>        loss <span class="op">+=</span> criterion(outputs, batch_labels)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="75d9713d" class="cell" data-execution_count="18">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="" aria-label="1"></a><span class="bu">print</span>(<span class="ss">f'Test loss = </span><span class="sc">{</span>loss<span class="sc">:.4f}</span><span class="ss">'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="5428ffc7" class="cell" data-execution_count="18">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="" aria-label="1"></a><span class="bu">print</span>(<span class="ss">f'Test loss = </span><span class="sc">{</span>loss<span class="sc">:.4f}</span><span class="ss">'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Test loss = 52393.1250</code></pre>
+<pre><code>Test loss = 53931.5039</code></pre>
 </div>
 </div>
 </section>
