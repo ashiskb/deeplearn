@@ -1,0 +1,2288 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="gradient-descent-flavors+backprop-with-pytorch_files/libs/clipboard/clipboard.min.js"></script>
+<script src="gradient-descent-flavors+backprop-with-pytorch_files/libs/quarto-html/tabby.min.js"></script>
+<script src="gradient-descent-flavors+backprop-with-pytorch_files/libs/quarto-html/popper.min.js"></script>
+<script src="gradient-descent-flavors+backprop-with-pytorch_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="gradient-descent-flavors+backprop-with-pytorch_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="gradient-descent-flavors+backprop-with-pytorch_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="gradient-descent-flavors+backprop-with-pytorch_files/libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="gradient-descent-flavors+backprop-with-pytorch_files/libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="gradient-descent-flavors+backprop-with-pytorch_files/libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="gradient-descent-flavors+backprop-with-pytorch_files/libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.10.18">
+
+  <meta name="author" content="Ashis Kumer Biswas, Ph.D.">
+  <title>Flavors of Gradient Descent + Backprop with PyTorch Compute Framework</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="gradient-descent-flavors+backprop-with-pytorch_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="gradient-descent-flavors+backprop-with-pytorch_files/libs/revealjs/dist/reveal.css">
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: 1.5em;}
+    div.column{flex: auto;}
+    @media screen {
+    div.columns{gap: min(4vw, 1.5em);}
+    div.column{overflow-x: auto;}
+    }
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; font-weight: bold; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="gradient-descent-flavors+backprop-with-pytorch_files/libs/revealjs/dist/theme/quarto-2740581606dc327e82f18f789b69d8a0.css">
+  <link href="gradient-descent-flavors+backprop-with-pytorch_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="gradient-descent-flavors+backprop-with-pytorch_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="gradient-descent-flavors+backprop-with-pytorch_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="gradient-descent-flavors+backprop-with-pytorch_files/libs/revealjs/plugin/reveal-chalkboard/font-awesome/css/all.css" rel="stylesheet">
+  <link href="gradient-descent-flavors+backprop-with-pytorch_files/libs/revealjs/plugin/reveal-chalkboard/style.css" rel="stylesheet">
+  <link href="gradient-descent-flavors+backprop-with-pytorch_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">Flavors of Gradient Descent + Backprop with PyTorch Compute Framework</h1>
+
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+Ashis Kumer Biswas, Ph.D.
+</div>
+</div>
+</div>
+
+</section>
+<section id="lets-learn-3-flavors-of-gradient-descent" class="slide level2 scrollable">
+<h2>Let’s learn 3 flavors of Gradient Descent</h2>
+<p>The flavors are:</p>
+<ol type="1">
+<li>Full-Batch Gradient Descent</li>
+<li>Stochastic Gradient Descent</li>
+<li>Mini-batch Gradient Descent</li>
+</ol>
+<ul>
+<li>Here, we are going to tackle a tiny linear-regression problem for all three methods
+<ul>
+<li>and the three methods change only how many training samples are used before each parameter gets the update.</li>
+</ul></li>
+</ul>
+</section>
+<section id="a-simple-regression-model" class="slide level2 scrollable">
+<h2>A simple regression model</h2>
+<p>Suppose we want to learn:</p>
+<p><span class="math display">\[
+\hat y = wx+b
+\]</span></p>
+<p>from a small dataset.</p>
+</section>
+<section id="full-batch-gradient-descent" class="slide level2 scrollable">
+<h2>1. Full-Batch Gradient Descent</h2>
+<blockquote>
+<p>Use <strong>all training samples</strong> to calculate the gradient, then update the parameters once.</p>
+</blockquote>
+<div id="25e9c1ca" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="" aria-label="1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-2"><a href="" aria-label="2"></a></span>
+<span id="cb1-3"><a href="" aria-label="3"></a><span class="co"># Dataset: y = 2x + 1</span></span>
+<span id="cb1-4"><a href="" aria-label="4"></a>X <span class="op">=</span> np.array([<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>], dtype<span class="op">=</span><span class="bu">float</span>)</span>
+<span id="cb1-5"><a href="" aria-label="5"></a>y <span class="op">=</span> np.array([<span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">9</span>], dtype<span class="op">=</span><span class="bu">float</span>)</span>
+<span id="cb1-6"><a href="" aria-label="6"></a></span>
+<span id="cb1-7"><a href="" aria-label="7"></a><span class="co">#parameters to learn are: w and b</span></span>
+<span id="cb1-8"><a href="" aria-label="8"></a>w <span class="op">=</span> <span class="fl">0.0</span></span>
+<span id="cb1-9"><a href="" aria-label="9"></a>b <span class="op">=</span> <span class="fl">0.0</span></span>
+<span id="cb1-10"><a href="" aria-label="10"></a></span>
+<span id="cb1-11"><a href="" aria-label="11"></a><span class="co">#hyper-parameters</span></span>
+<span id="cb1-12"><a href="" aria-label="12"></a>lr <span class="op">=</span> <span class="fl">0.01</span> <span class="co">#learning rate</span></span>
+<span id="cb1-13"><a href="" aria-label="13"></a>num_epochs <span class="op">=</span> <span class="dv">1000</span> <span class="co">#number of desired epochs to run</span></span>
+<span id="cb1-14"><a href="" aria-label="14"></a></span>
+<span id="cb1-15"><a href="" aria-label="15"></a><span class="co">#this loop runs `num_epochs` times</span></span>
+<span id="cb1-16"><a href="" aria-label="16"></a><span class="cf">for</span> epoch <span class="kw">in</span> <span class="bu">range</span>(num_epochs):</span>
+<span id="cb1-17"><a href="" aria-label="17"></a></span>
+<span id="cb1-18"><a href="" aria-label="18"></a>    <span class="co"># predictions for ALL samples.</span></span>
+<span id="cb1-19"><a href="" aria-label="19"></a>    <span class="co"># Analogy: forward pass</span></span>
+<span id="cb1-20"><a href="" aria-label="20"></a>    y_pred <span class="op">=</span> w <span class="op">*</span> X <span class="op">+</span> b</span>
+<span id="cb1-21"><a href="" aria-label="21"></a></span>
+<span id="cb1-22"><a href="" aria-label="22"></a>    <span class="co"># gradients using ALL samples</span></span>
+<span id="cb1-23"><a href="" aria-label="23"></a>    dw <span class="op">=</span> np.mean(<span class="dv">2</span> <span class="op">*</span> X <span class="op">*</span> (y_pred <span class="op">-</span> y))</span>
+<span id="cb1-24"><a href="" aria-label="24"></a>    db <span class="op">=</span> np.mean(<span class="dv">2</span> <span class="op">*</span> (y_pred <span class="op">-</span> y))</span>
+<span id="cb1-25"><a href="" aria-label="25"></a></span>
+<span id="cb1-26"><a href="" aria-label="26"></a>    <span class="co"># one update per epoch</span></span>
+<span id="cb1-27"><a href="" aria-label="27"></a>    w <span class="op">=</span> w <span class="op">-</span> lr <span class="op">*</span> dw</span>
+<span id="cb1-28"><a href="" aria-label="28"></a>    b <span class="op">=</span> b <span class="op">-</span> lr <span class="op">*</span> db</span>
+<span id="cb1-29"><a href="" aria-label="29"></a></span>
+<span id="cb1-30"><a href="" aria-label="30"></a><span class="bu">print</span>(<span class="st">'Done with training'</span>)</span>
+<span id="cb1-31"><a href="" aria-label="31"></a><span class="bu">print</span>(<span class="ss">f"Learned parameters: </span><span class="ch">\n</span><span class="ss">w = </span><span class="sc">{</span>w<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb1-32"><a href="" aria-label="32"></a><span class="bu">print</span>(<span class="ss">f"b = </span><span class="sc">{</span>b<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Done with training
+Learned parameters: 
+w = 2.0048610156782556
+b = 0.9857080211211781</code></pre>
+</div>
+</div>
+<p>The important idea is:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb3-1"><a href="" aria-label="1"></a>4 samples → calculate gradient → update once</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>So with 4 samples:</p>
+<p><span class="math display">\[
+\boxed{\text{1 update per epoch}}
+\]</span></p>
+</section>
+<section id="stochastic-gradient-descent-sgd" class="slide level2 scrollable">
+<h2>2. Stochastic Gradient Descent (SGD)</h2>
+<blockquote>
+<p>Use <strong>one training sample at a time</strong>, calculate its gradient, and immediately update the parameters.</p>
+</blockquote>
+<div id="da082c01" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="" aria-label="1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb4-2"><a href="" aria-label="2"></a></span>
+<span id="cb4-3"><a href="" aria-label="3"></a>X <span class="op">=</span> np.array([<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>], dtype<span class="op">=</span><span class="bu">float</span>)</span>
+<span id="cb4-4"><a href="" aria-label="4"></a>y <span class="op">=</span> np.array([<span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">9</span>], dtype<span class="op">=</span><span class="bu">float</span>)</span>
+<span id="cb4-5"><a href="" aria-label="5"></a></span>
+<span id="cb4-6"><a href="" aria-label="6"></a><span class="co">#parameters to learn are: w and b</span></span>
+<span id="cb4-7"><a href="" aria-label="7"></a>w <span class="op">=</span> <span class="fl">0.0</span></span>
+<span id="cb4-8"><a href="" aria-label="8"></a>b <span class="op">=</span> <span class="fl">0.0</span></span>
+<span id="cb4-9"><a href="" aria-label="9"></a></span>
+<span id="cb4-10"><a href="" aria-label="10"></a><span class="co">#hyper-parameters</span></span>
+<span id="cb4-11"><a href="" aria-label="11"></a>lr <span class="op">=</span> <span class="fl">0.01</span> <span class="co">#learning rate</span></span>
+<span id="cb4-12"><a href="" aria-label="12"></a>num_epochs <span class="op">=</span> <span class="dv">1000</span> <span class="co">#number of desired epochs to run</span></span>
+<span id="cb4-13"><a href="" aria-label="13"></a></span>
+<span id="cb4-14"><a href="" aria-label="14"></a><span class="co">#this loop runs `num_epochs` times</span></span>
+<span id="cb4-15"><a href="" aria-label="15"></a></span>
+<span id="cb4-16"><a href="" aria-label="16"></a><span class="cf">for</span> epoch <span class="kw">in</span> <span class="bu">range</span>(num_epochs):</span>
+<span id="cb4-17"><a href="" aria-label="17"></a></span>
+<span id="cb4-18"><a href="" aria-label="18"></a>    <span class="co"># shuffle the data</span></span>
+<span id="cb4-19"><a href="" aria-label="19"></a>    indices <span class="op">=</span> np.random.permutation(<span class="bu">len</span>(X))</span>
+<span id="cb4-20"><a href="" aria-label="20"></a></span>
+<span id="cb4-21"><a href="" aria-label="21"></a>    <span class="co">#this loop ensures picking each and </span></span>
+<span id="cb4-22"><a href="" aria-label="22"></a>    <span class="co">#      every sample from the training set</span></span>
+<span id="cb4-23"><a href="" aria-label="23"></a>    <span class="cf">for</span> i <span class="kw">in</span> indices: </span>
+<span id="cb4-24"><a href="" aria-label="24"></a></span>
+<span id="cb4-25"><a href="" aria-label="25"></a>        <span class="co"># prediction for ONE sample</span></span>
+<span id="cb4-26"><a href="" aria-label="26"></a>        <span class="co"># Analogy: the forward pass</span></span>
+<span id="cb4-27"><a href="" aria-label="27"></a>        y_pred <span class="op">=</span> w <span class="op">*</span> X[i] <span class="op">+</span> b</span>
+<span id="cb4-28"><a href="" aria-label="28"></a></span>
+<span id="cb4-29"><a href="" aria-label="29"></a>        <span class="co"># gradient from ONE sample</span></span>
+<span id="cb4-30"><a href="" aria-label="30"></a>        dw <span class="op">=</span> <span class="dv">2</span> <span class="op">*</span> X[i] <span class="op">*</span> (y_pred <span class="op">-</span> y[i])</span>
+<span id="cb4-31"><a href="" aria-label="31"></a>        db <span class="op">=</span> <span class="dv">2</span> <span class="op">*</span> (y_pred <span class="op">-</span> y[i])</span>
+<span id="cb4-32"><a href="" aria-label="32"></a></span>
+<span id="cb4-33"><a href="" aria-label="33"></a>        <span class="co"># update immediately</span></span>
+<span id="cb4-34"><a href="" aria-label="34"></a>        w <span class="op">=</span> w <span class="op">-</span> lr <span class="op">*</span> dw</span>
+<span id="cb4-35"><a href="" aria-label="35"></a>        b <span class="op">=</span> b <span class="op">-</span> lr <span class="op">*</span> db</span>
+<span id="cb4-36"><a href="" aria-label="36"></a></span>
+<span id="cb4-37"><a href="" aria-label="37"></a><span class="bu">print</span>(<span class="st">'Done with training'</span>)</span>
+<span id="cb4-38"><a href="" aria-label="38"></a><span class="bu">print</span>(<span class="ss">f"Learned parameters: </span><span class="ch">\n</span><span class="ss">w = </span><span class="sc">{</span>w<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb4-39"><a href="" aria-label="39"></a><span class="bu">print</span>(<span class="ss">f"b = </span><span class="sc">{</span>b<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Done with training
+Learned parameters: 
+w = 2.000000326531718
+b = 0.9999990025216735</code></pre>
+</div>
+</div>
+<p>Now the process is:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb6-1"><a href="" aria-label="1"></a>sample 1 → gradient → update</span>
+<span id="cb6-2"><a href="" aria-label="2"></a>sample 3 → gradient → update</span>
+<span id="cb6-3"><a href="" aria-label="3"></a>sample 2 → gradient → update</span>
+<span id="cb6-4"><a href="" aria-label="4"></a>sample 4 → gradient → update</span>
+<span id="cb6-5"><a href="" aria-label="5"></a>1 epoch completed</span>
+<span id="cb6-6"><a href="" aria-label="6"></a>sample 1 → gradient → update</span>
+<span id="cb6-7"><a href="" aria-label="7"></a>sample 4 → gradient → update</span>
+<span id="cb6-8"><a href="" aria-label="8"></a>sample 2 → gradient → update</span>
+<span id="cb6-9"><a href="" aria-label="9"></a>sample 3 → gradient → update</span>
+<span id="cb6-10"><a href="" aria-label="10"></a>Another epoch completed</span>
+<span id="cb6-11"><a href="" aria-label="11"></a>...</span>
+<span id="cb6-12"><a href="" aria-label="12"></a>...</span>
+<span id="cb6-13"><a href="" aria-label="13"></a>1000 epochs completed.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Thus, with 4 samples:</p>
+<p><span class="math display">\[
+\boxed{\text{4 updates per epoch}}
+\]</span></p>
+<p>This is why SGD tends to have a somewhat noisy/zig-zagging optimization path.</p>
+</section>
+<section id="mini-batch-gradient-descent" class="slide level2 scrollable">
+<h2>3. Mini-Batch Gradient Descent</h2>
+<blockquote>
+<p>Here, divide the training data into <strong>small manageable size batches</strong>. Then, calculate the gradient for each batch and update parameters once per batch.</p>
+</blockquote>
+<p>For example, let <code>batch_size = 2</code>.</p>
+<div id="29f221bc" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="" aria-label="1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb7-2"><a href="" aria-label="2"></a></span>
+<span id="cb7-3"><a href="" aria-label="3"></a>X <span class="op">=</span> np.array([<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>], dtype<span class="op">=</span><span class="bu">float</span>)</span>
+<span id="cb7-4"><a href="" aria-label="4"></a>y <span class="op">=</span> np.array([<span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">9</span>], dtype<span class="op">=</span><span class="bu">float</span>)</span>
+<span id="cb7-5"><a href="" aria-label="5"></a></span>
+<span id="cb7-6"><a href="" aria-label="6"></a><span class="co">#parameters to learn are: w and b</span></span>
+<span id="cb7-7"><a href="" aria-label="7"></a>w <span class="op">=</span> <span class="fl">0.0</span></span>
+<span id="cb7-8"><a href="" aria-label="8"></a>b <span class="op">=</span> <span class="fl">0.0</span></span>
+<span id="cb7-9"><a href="" aria-label="9"></a></span>
+<span id="cb7-10"><a href="" aria-label="10"></a><span class="co">#hyper-parameters</span></span>
+<span id="cb7-11"><a href="" aria-label="11"></a>lr <span class="op">=</span> <span class="fl">0.01</span> <span class="co">#learning rate</span></span>
+<span id="cb7-12"><a href="" aria-label="12"></a>num_epochs <span class="op">=</span> <span class="dv">1000</span> <span class="co">#number of desired epochs to run</span></span>
+<span id="cb7-13"><a href="" aria-label="13"></a>batch_size <span class="op">=</span> <span class="dv">2</span> <span class="co">#batch size </span></span>
+<span id="cb7-14"><a href="" aria-label="14"></a></span>
+<span id="cb7-15"><a href="" aria-label="15"></a></span>
+<span id="cb7-16"><a href="" aria-label="16"></a><span class="co">#this loop runs `num_epochs` times</span></span>
+<span id="cb7-17"><a href="" aria-label="17"></a><span class="cf">for</span> epoch <span class="kw">in</span> <span class="bu">range</span>(num_epochs):</span>
+<span id="cb7-18"><a href="" aria-label="18"></a></span>
+<span id="cb7-19"><a href="" aria-label="19"></a>    <span class="co"># shuffle data</span></span>
+<span id="cb7-20"><a href="" aria-label="20"></a>    indices <span class="op">=</span> np.random.permutation(<span class="bu">len</span>(X))</span>
+<span id="cb7-21"><a href="" aria-label="21"></a>    X_shuffled <span class="op">=</span> X[indices]</span>
+<span id="cb7-22"><a href="" aria-label="22"></a>    y_shuffled <span class="op">=</span> y[indices]</span>
+<span id="cb7-23"><a href="" aria-label="23"></a></span>
+<span id="cb7-24"><a href="" aria-label="24"></a>    <span class="co">#this following loop creates batches of data samples</span></span>
+<span id="cb7-25"><a href="" aria-label="25"></a>    <span class="co"># and make sure the entire training set is divided into</span></span>
+<span id="cb7-26"><a href="" aria-label="26"></a>    <span class="co">#  equal sized batches. </span></span>
+<span id="cb7-27"><a href="" aria-label="27"></a>    <span class="cf">for</span> start <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, <span class="bu">len</span>(X), batch_size):</span>
+<span id="cb7-28"><a href="" aria-label="28"></a></span>
+<span id="cb7-29"><a href="" aria-label="29"></a>        X_batch <span class="op">=</span> X_shuffled[start:start <span class="op">+</span> batch_size]</span>
+<span id="cb7-30"><a href="" aria-label="30"></a>        y_batch <span class="op">=</span> y_shuffled[start:start <span class="op">+</span> batch_size]</span>
+<span id="cb7-31"><a href="" aria-label="31"></a></span>
+<span id="cb7-32"><a href="" aria-label="32"></a>        <span class="co"># predictions for the batch</span></span>
+<span id="cb7-33"><a href="" aria-label="33"></a>        <span class="co"># Analogy: forward propagation</span></span>
+<span id="cb7-34"><a href="" aria-label="34"></a>        y_pred <span class="op">=</span> w <span class="op">*</span> X_batch <span class="op">+</span> b</span>
+<span id="cb7-35"><a href="" aria-label="35"></a></span>
+<span id="cb7-36"><a href="" aria-label="36"></a>        <span class="co"># gradients averaged over the batch</span></span>
+<span id="cb7-37"><a href="" aria-label="37"></a>        dw <span class="op">=</span> np.mean(<span class="dv">2</span> <span class="op">*</span> X_batch <span class="op">*</span> (y_pred <span class="op">-</span> y_batch))</span>
+<span id="cb7-38"><a href="" aria-label="38"></a>        db <span class="op">=</span> np.mean(<span class="dv">2</span> <span class="op">*</span> (y_pred <span class="op">-</span> y_batch))</span>
+<span id="cb7-39"><a href="" aria-label="39"></a></span>
+<span id="cb7-40"><a href="" aria-label="40"></a>        <span class="co"># one update per batch</span></span>
+<span id="cb7-41"><a href="" aria-label="41"></a>        w <span class="op">=</span> w <span class="op">-</span> lr <span class="op">*</span> dw</span>
+<span id="cb7-42"><a href="" aria-label="42"></a>        b <span class="op">=</span> b <span class="op">-</span> lr <span class="op">*</span> db</span>
+<span id="cb7-43"><a href="" aria-label="43"></a></span>
+<span id="cb7-44"><a href="" aria-label="44"></a><span class="bu">print</span>(<span class="st">'Done with training'</span>)</span>
+<span id="cb7-45"><a href="" aria-label="45"></a><span class="bu">print</span>(<span class="ss">f"Learned parameters: </span><span class="ch">\n</span><span class="ss">w = </span><span class="sc">{</span>w<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb7-46"><a href="" aria-label="46"></a><span class="bu">print</span>(<span class="ss">f"b = </span><span class="sc">{</span>b<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Done with training
+Learned parameters: 
+w = 2.0002238845118687
+b = 0.9993399630343945</code></pre>
+</div>
+</div>
+<p>With four samples and <code>batch_size=2</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb9-1"><a href="" aria-label="1"></a>samples 1,3 → gradient → update</span>
+<span id="cb9-2"><a href="" aria-label="2"></a>samples 2,4 → gradient → update</span>
+<span id="cb9-3"><a href="" aria-label="3"></a>1 epoch completed</span>
+<span id="cb9-4"><a href="" aria-label="4"></a>samples 2,3 → gradient → update</span>
+<span id="cb9-5"><a href="" aria-label="5"></a>samples 1,4 → gradient → update</span>
+<span id="cb9-6"><a href="" aria-label="6"></a>another epoch completed</span>
+<span id="cb9-7"><a href="" aria-label="7"></a>samples 1,2 → gradient → update</span>
+<span id="cb9-8"><a href="" aria-label="8"></a>samples 3,4 → gradient → update</span>
+<span id="cb9-9"><a href="" aria-label="9"></a>another epoch completed</span>
+<span id="cb9-10"><a href="" aria-label="10"></a>...</span>
+<span id="cb9-11"><a href="" aria-label="11"></a>...</span>
+<span id="cb9-12"><a href="" aria-label="12"></a>1000 epochs completed.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Thus:</p>
+<p><span class="math display">\[
+\boxed{\text{2 updates per epoch}}
+\]</span></p>
+</section>
+<section id="the-key-distinction-between-the-3-flavors-of-gradient-descent" class="slide level2 scrollable">
+<h2>The key distinction between the 3 flavors of gradient descent:</h2>
+<p>Pseudocodes to make sense:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="" aria-label="1"></a><span class="co"># Full-batch</span></span>
+<span id="cb10-2"><a href="" aria-label="2"></a><span class="ex">gradient</span> = gradient_from<span class="er">(</span><span class="ex">all_samples</span><span class="kw">)</span></span>
+<span id="cb10-3"><a href="" aria-label="3"></a><span class="fu">update_parameters()</span></span>
+<span id="cb10-4"><a href="" aria-label="4"></a></span>
+<span id="cb10-5"><a href="" aria-label="5"></a><span class="co"># Stochastic</span></span>
+<span id="cb10-6"><a href="" aria-label="6"></a><span class="cf">for</span> a_sample <span class="kw">in</span> data:</span>
+<span id="cb10-7"><a href="" aria-label="7"></a>    <span class="ex">gradient</span> = gradient_from<span class="er">(</span><span class="ex">a_sample</span><span class="kw">)</span></span>
+<span id="cb10-8"><a href="" aria-label="8"></a>    <span class="fu">update_parameters()</span></span>
+<span id="cb10-9"><a href="" aria-label="9"></a></span>
+<span id="cb10-10"><a href="" aria-label="10"></a><span class="co"># Mini-batch</span></span>
+<span id="cb10-11"><a href="" aria-label="11"></a><span class="cf">for</span> a_batch <span class="kw">in</span> [data divided into equal sized batches]:</span>
+<span id="cb10-12"><a href="" aria-label="12"></a>    <span class="ex">gradient</span> = gradient_from<span class="er">(</span><span class="ex">a_batch</span><span class="kw">)</span></span>
+<span id="cb10-13"><a href="" aria-label="13"></a>    <span class="fu">update_parameters()</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="note-on-full-batch-and-stochastic-gradient-descent" class="slide level2 scrollable">
+<h2>Note on Full-batch and Stochastic Gradient Descent</h2>
+<ul>
+<li>There is a big difference between these two extreme flavors of gradient descent.
+<ul>
+<li>The difference comes from <strong>how accurately each method estimates the direction of steepest descent</strong>.</li>
+</ul></li>
+</ul>
+<p>For a dataset with <span class="math inline">\(N\)</span> samples, the full-batch gradient is</p>
+<p><span class="math display">\[
+\nabla L(w)=\frac{1}{N}\sum_{i=1}^{N}\nabla L_i(w)
+\]</span></p>
+<p>so every update uses the <strong>average opinion of all samples</strong>. Individual samples may pull the weights in different directions, but much of that variation cancels out. Therefore, for a fixed dataset and learning rate, the update direction is relatively stable and deterministic:</p>
+<p><span class="math display">\[
+w_{t+1}=w_t-\eta\nabla L(w_t)
+\]</span></p>
+<p>That gives the smoother trajectory in the first figure.</p>
+<p><a href="figs/gd-smooth.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img data-src="figs/gd-smooth.png"></a></p>
+<p>However, with SGD, we randomly select just <strong>one sample</strong>:</p>
+<p><span class="math display">\[
+w_{t+1}=w_t-\eta\nabla L_i(w_t)
+\]</span></p>
+<p>That sample’s gradient may point somewhat differently from the gradient of the entire dataset. Then the next randomly selected sample may point another way. So SGD behaves approximately like</p>
+<p><span class="math display">\[
+\text{SGD gradient}
+=
+\text{true full gradient}
++
+\text{noise}
+\]</span></p>
+<p>which creates the zig-zagging behavior:</p>
+<p><a href="figs/sgd-noisy.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img data-src="figs/sgd-noisy.png"></a></p>
+<blockquote>
+<p>Intuition: imagine finding directions to a destination, say the <code>Ball Arena Stadium</code> starting from our classroom.</p>
+</blockquote>
+<p><strong>Full-batch GD asks everyone in the class and averages their answers before taking one step. On the other hand, SGD asks one randomly selected student, takes a step, then asks another student.</strong> The general direction may still be correct, but the path may wander a lot on the way to the Ball Arena.</p>
+<p>This does <strong>not</strong> mean SGD is bad. The noise can actually be beneficial in deep learning because it may help the optimizer move through flat regions or avoid some undesirable local behavior. As training progresses, we often reduce the learning rate so those oscillations become smaller. <em>More on this in later lectures; so stay tuned!</em></p>
+<p>The three methods therefore form a nice continuum:</p>
+<p><span class="math display">\[
+\boxed{\text{SGD: noisy}}
+\quad\longrightarrow\quad
+\boxed{\text{Mini-batch: moderately noisy}}
+\quad\longrightarrow\quad
+\boxed{\text{Full-batch: smooth}}
+\]</span></p>
+<blockquote>
+<p>Full-batch follows the average gradient of the whole dataset;</p>
+</blockquote>
+<blockquote>
+<p>SGD follows an individual sample’s gradient, so its direction changes from sample to sample.**</p>
+</blockquote>
+</section>
+<section id="practical-notes-on-the-3-flavors" class="slide level2">
+<h2>Practical Notes on the 3 flavors</h2>
+<ul>
+<li>In modern deep learning, <strong>mini-batch gradient descent</strong> is overwhelmingly the practical choice because it combines reasonably stable gradient estimates with efficient GPU computation.
+<ul>
+<li>What PyTorch typically calls using an optimizer such as <code>torch.optim.SGD</code> with a <code>DataLoader(batch_size=32)</code> is, technically, <strong>mini-batch SGD</strong>.</li>
+</ul></li>
+</ul>
+</section>
+<section id="now-back-to-pytorch" class="slide level2 scrollable">
+<h2>Now, Back to PyTorch</h2>
+<blockquote>
+<p>here is a formal introduction to <code>PyTorch</code> Compute Framework</p>
+</blockquote>
+<ul>
+<li><p>The rest of this presentation is a compilation of Pytorch official documentations and the following tutorials:</p></li>
+<li><p><a href="https://pytorch.org/tutorials/beginner/deep_learning_60min_blitz.html">https://pytorch.org/tutorials/beginner/deep_learning_60min_blitz.html</a></p></li>
+<li><p><a href="https://pytorch.org/tutorials/beginner/deep_learning_60min_blitz.html">https://pytorch.org/tutorials/beginner/pytorch_with_examples.html</a></p></li>
+</ul>
+<p><a href="https://code.fb.com/wp-content/uploads/2018/09/PyTorch_Blog-Post_Hero.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img data-src="https://code.fb.com/wp-content/uploads/2018/09/PyTorch_Blog-Post_Hero.png"></a></p>
+</section>
+<section id="the-imports" class="slide level2">
+<h2>The imports</h2>
+<div id="3a6e6a58" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;slideshow&quot;,&quot;value&quot;:{&quot;slide_type&quot;:&quot;slide&quot;}}" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="" aria-label="1"></a><span class="co">#import libraries</span></span>
+<span id="cb11-2"><a href="" aria-label="2"></a><span class="im">import</span> torch</span>
+<span id="cb11-3"><a href="" aria-label="3"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb11-4"><a href="" aria-label="4"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<h3 class="scrollable" id="check-installed-version-of-pytorch">Check installed version of Pytorch</h3>
+<div id="9a4787fa" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;slideshow&quot;,&quot;value&quot;:{&quot;slide_type&quot;:&quot;slide&quot;}}" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="" aria-label="1"></a><span class="bu">print</span>(torch.__version__)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>2.7.1+cu126</code></pre>
+</div>
+</div>
+</section>
+<section id="pytorch-tensors" class="slide level2 scrollable">
+<h2>PyTorch Tensors</h2>
+<p>PyTorch tensors are just like NumPy nd-arrays (i.e., n-dimensional arrays), and they include many of the same operations you are used to from the NumPy library.</p>
+</section>
+<section id="now-lets-initialize-tensors" class="slide level2 scrollable">
+<h2>Now let’s initialize tensors</h2>
+</section>
+<section id="torch.onessize" class="slide level2 scrollable">
+<h2><code>torch.ones(size)</code></h2>
+<ul>
+<li>returns a tensor filled with the scalar value 1, with the shape defined by the variable argument <code>size</code>.</li>
+<li>More information at <a href="https://pytorch.org/docs/stable/generated/torch.ones.html">Pytorch.org</a></li>
+</ul>
+<div id="f4535936" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;slideshow&quot;,&quot;value&quot;:{&quot;slide_type&quot;:&quot;slide&quot;}}" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="" aria-label="1"></a><span class="co"># Construct a tensor of size 5x3 with all one (1) values:</span></span>
+<span id="cb14-2"><a href="" aria-label="2"></a>x <span class="op">=</span> torch.ones(<span class="dv">5</span>,<span class="dv">3</span>)</span>
+<span id="cb14-3"><a href="" aria-label="3"></a><span class="bu">print</span>(x)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>tensor([[1., 1., 1.],
+        [1., 1., 1.],
+        [1., 1., 1.],
+        [1., 1., 1.],
+        [1., 1., 1.]])</code></pre>
+</div>
+</div>
+</section>
+<section id="torch.zerossize" class="slide level2 scrollable">
+<h2><code>torch.zeros(size)</code></h2>
+<ul>
+<li>returns a tensor filled with the scalar value 0, with the shape defined by the variable argument <code>size</code>.</li>
+<li>More information at <a href="https://pytorch.org/docs/stable/generated/torch.zeros.html">Pytorch.org</a></li>
+</ul>
+<div id="a608ec28" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;slideshow&quot;,&quot;value&quot;:{&quot;slide_type&quot;:&quot;slide&quot;}}" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="" aria-label="1"></a><span class="co"># Construct a tensor of size 3x2 with all zero (0) values:</span></span>
+<span id="cb16-2"><a href="" aria-label="2"></a>z <span class="op">=</span> torch.zeros(<span class="dv">3</span>, <span class="dv">2</span>)</span>
+<span id="cb16-3"><a href="" aria-label="3"></a><span class="bu">print</span>(z)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>tensor([[0., 0.],
+        [0., 0.],
+        [0., 0.]])</code></pre>
+</div>
+</div>
+</section>
+<section id="torch.randsize" class="slide level2 scrollable">
+<h2><code>torch.rand(size)</code></h2>
+<ul>
+<li>Returns a tensor filled with random numbers from a uniform distribution on the interval [0, 1)</li>
+<li>More information at <a href="https://pytorch.org/docs/stable/generated/torch.rand.html">Pytorch.org</a></li>
+</ul>
+<div id="b9a3b3f1" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;slideshow&quot;,&quot;value&quot;:{&quot;slide_type&quot;:&quot;slide&quot;}}" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="" aria-label="1"></a><span class="co"># Construct a tensor of size 3x2 with all uniform random values:</span></span>
+<span id="cb18-2"><a href="" aria-label="2"></a>u <span class="op">=</span> torch.rand(<span class="dv">3</span>, <span class="dv">2</span>)</span>
+<span id="cb18-3"><a href="" aria-label="3"></a><span class="bu">print</span>(u)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>tensor([[0.9949, 0.6679],
+        [0.0726, 0.4735],
+        [0.6954, 0.0386]])</code></pre>
+</div>
+</div>
+</section>
+<section id="torch.randnsize" class="slide level2 scrollable">
+<h2><code>torch.randn(size)</code></h2>
+<ul>
+<li>Returns a tensor filled with random numbers from a normal distribution with mean 0 and variance 1 (also called the standard normal distribution).</li>
+</ul>
+<p><span class="math display">\[
+\text{out}_{i} \sim \mathcal{N}(0, 1)
+\]</span> - More information at <a href="https://pytorch.org/docs/stable/generated/torch.randn.html">Pytorch.org</a></p>
+<div id="0869e0e0" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;slideshow&quot;,&quot;value&quot;:{&quot;slide_type&quot;:&quot;slide&quot;}}" data-execution_count="9">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="" aria-label="1"></a><span class="co"># Construct a tensor of size 3x2 with all normally distributed values:</span></span>
+<span id="cb20-2"><a href="" aria-label="2"></a>y <span class="op">=</span> torch.randn(<span class="dv">3</span>,<span class="dv">3</span>)</span>
+<span id="cb20-3"><a href="" aria-label="3"></a><span class="bu">print</span>(y)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>tensor([[ 0.6450,  1.2108, -0.1123],
+        [ 0.1150, -0.0490,  0.2997],
+        [-0.6799, -1.4817,  1.7629]])</code></pre>
+</div>
+</div>
+</section>
+<section id="torch.emptysize" class="slide level2 scrollable">
+<h2><code>torch.empty(size)</code></h2>
+<ul>
+<li>Returns a tensor filled with <code>uninitialized data</code>. The shape of the tensor is defined by the variable argument size.</li>
+<li>More information at <a href="https://pytorch.org/docs/stable/generated/torch.empty.html">Pytorch.org</a></li>
+</ul>
+<div id="29f05b63" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;slideshow&quot;,&quot;value&quot;:{&quot;slide_type&quot;:&quot;slide&quot;}}" data-execution_count="10">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="" aria-label="1"></a><span class="co"># Construct a tensor of size 3x2 with all uninitialized (garbage) values:</span></span>
+<span id="cb22-2"><a href="" aria-label="2"></a>x <span class="op">=</span> torch.empty(<span class="dv">3</span>, <span class="dv">2</span>)</span>
+<span id="cb22-3"><a href="" aria-label="3"></a><span class="bu">print</span>(x)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>tensor([[4.9995e-09, 0.0000e+00],
+        [0.0000e+00, 0.0000e+00],
+        [0.0000e+00, 0.0000e+00]])</code></pre>
+</div>
+</div>
+</section>
+<section id="dtype-of-torch-tensors" class="slide level2 scrollable">
+<h2>dtype of torch tensors</h2>
+<ul>
+<li>Common types are–
+<ul>
+<li><code>torch.float32</code> or <code>torch.float</code></li>
+<li><code>torch.float64</code> or <code>torch.double</code></li>
+<li><code>torch.int32</code> or <code>torch.int</code></li>
+<li><code>torch.in64</code> or <code>torch.long</code></li>
+<li><code>torch.bool</code></li>
+</ul></li>
+<li>More information at <a href="https://pytorch.org/docs/stable/tensor_attributes.html">Pytorch.org</a></li>
+</ul>
+<div id="cbcc1992" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;slideshow&quot;,&quot;value&quot;:{&quot;slide_type&quot;:&quot;slide&quot;}}" data-execution_count="11">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="" aria-label="1"></a><span class="co"># Construct a tensor of size 3x2 with all uniform random values:</span></span>
+<span id="cb24-2"><a href="" aria-label="2"></a>u <span class="op">=</span> torch.rand(<span class="dv">3</span>, <span class="dv">2</span>)</span>
+<span id="cb24-3"><a href="" aria-label="3"></a><span class="bu">print</span>(u)</span>
+<span id="cb24-4"><a href="" aria-label="4"></a></span>
+<span id="cb24-5"><a href="" aria-label="5"></a><span class="co">#get the dtype of tensor u</span></span>
+<span id="cb24-6"><a href="" aria-label="6"></a><span class="bu">print</span>(u.dtype)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>tensor([[0.1232, 0.3853],
+        [0.5217, 0.3946],
+        [0.1049, 0.7061]])
+torch.float32</code></pre>
+</div>
+</div>
+</section>
+<section id="defining-a-tensor-of-certain-types" class="slide level2 scrollable">
+<h2>Defining a tensor of certain types</h2>
+<div id="d58bba45" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;slideshow&quot;,&quot;value&quot;:{&quot;slide_type&quot;:&quot;slide&quot;}}" data-execution_count="12">
+<div class="cell-output cell-output-stdout">
+<pre><code>tensor([[0.8983, 0.1426],
+        [0.2331, 0.3898],
+        [0.1030, 0.1439]], dtype=torch.float64)</code></pre>
+</div>
+</div>
+</section>
+<section id="create-tensor-_like-other-tensor" class="slide level2 scrollable">
+<h2>Create tensor <code>_like</code> other tensor</h2>
+<ul>
+<li>All the tensor initialization functions above has a version <code>*_like</code> to create another tensor filled with values corresponding to the function, but with the same size as the <code>input</code> (other) tensor.
+<ul>
+<li><code>torch.ones_like(input)</code> – returns a tensor filled with the scalar value 1, with the same size as <code>input</code> tensor.</li>
+<li><code>torch.zeros_like(input)</code> – returns a tensor filled with the scalar value 0, with the same size as <code>input</code> tensor.</li>
+<li><code>torch.rand_like(input)</code> – returns a tensor with the same size as <code>input</code> tensor that is filled with random numbers from a uniform distribution on the interval [0,1).</li>
+<li><code>torch.randn_like(input)</code> – returns a tensor with the same size as input that is filled with random numbers from a normal distribution <span class="math inline">\(\mathcal{N}(0, 1)\)</span>.</li>
+</ul></li>
+</ul>
+<div id="113c3bb1" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;slideshow&quot;,&quot;value&quot;:{&quot;slide_type&quot;:&quot;slide&quot;}}" data-execution_count="13">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="" aria-label="1"></a><span class="co"># create a tensor of size (4,5) filled with values from normal distribution with mean=0, stdev=1</span></span>
+<span id="cb27-2"><a href="" aria-label="2"></a>x <span class="op">=</span> torch.randn(<span class="dv">4</span>,<span class="dv">5</span>)</span>
+<span id="cb27-3"><a href="" aria-label="3"></a><span class="bu">print</span>(x)</span>
+<span id="cb27-4"><a href="" aria-label="4"></a></span>
+<span id="cb27-5"><a href="" aria-label="5"></a><span class="co"># create a zero tensor just like the shape of tensor x</span></span>
+<span id="cb27-6"><a href="" aria-label="6"></a>y <span class="op">=</span> torch.zeros_like(x)</span>
+<span id="cb27-7"><a href="" aria-label="7"></a><span class="bu">print</span>(y)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>tensor([[-0.8033,  1.1355, -1.0260, -1.1391, -1.2486],
+        [ 0.7356,  1.4836, -0.9635, -0.1264,  1.1520],
+        [ 0.9245, -0.2971,  0.3650, -0.0476, -0.3689],
+        [-1.1731, -0.6599,  1.9798, -1.0085, -1.2645]])
+tensor([[0., 0., 0., 0., 0.],
+        [0., 0., 0., 0., 0.],
+        [0., 0., 0., 0., 0.],
+        [0., 0., 0., 0., 0.]])</code></pre>
+</div>
+</div>
+</section>
+<section id="torch.linspacestartendsteps" class="slide level2 scrollable">
+<h2><code>torch.linspace(start,end,steps)</code></h2>
+<ul>
+<li>Creates a one-dimensional tensor of size <code>steps</code> whose values are evenly spaced from <code>start</code> to <code>end</code>, <strong>inclusive</strong>. That is, the value are: <span class="math display">\[
+(\text{start}, \text{start} + \frac{\text{end} - \text{start}}{\text{steps} - 1}, \ldots, \text{start} + (\text{steps} - 2) * \frac{\text{end} - \text{start}}{\text{steps} - 1}, \text{end})
+\]</span></li>
+</ul>
+<div id="852a99e6" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;slideshow&quot;,&quot;value&quot;:{&quot;slide_type&quot;:&quot;slide&quot;}}" data-execution_count="14">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="" aria-label="1"></a><span class="co"># creates a one dimensional tensor of length 5, where each value are evenly spaced between 0 and 1.</span></span>
+<span id="cb29-2"><a href="" aria-label="2"></a>x <span class="op">=</span> torch.linspace(<span class="dv">0</span> , <span class="dv">1</span>, steps <span class="op">=</span> <span class="dv">5</span>)</span>
+<span id="cb29-3"><a href="" aria-label="3"></a><span class="bu">print</span>(x)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>tensor([0.0000, 0.2500, 0.5000, 0.7500, 1.0000])</code></pre>
+</div>
+</div>
+</section>
+<section id="torch.tensordata" class="slide level2 scrollable">
+<h2><code>torch.tensor(data)</code></h2>
+<ul>
+<li>Constructs a tensor with data.</li>
+</ul>
+<div id="24d376b5" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;slideshow&quot;,&quot;value&quot;:{&quot;slide_type&quot;:&quot;slide&quot;}}" data-execution_count="15">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="" aria-label="1"></a>x <span class="op">=</span> torch.tensor([[<span class="dv">1</span>, <span class="dv">2</span>], </span>
+<span id="cb31-2"><a href="" aria-label="2"></a>                 [<span class="dv">3</span>, <span class="dv">4</span>], </span>
+<span id="cb31-3"><a href="" aria-label="3"></a>                 [<span class="dv">5</span>, <span class="dv">6</span>]])</span>
+<span id="cb31-4"><a href="" aria-label="4"></a><span class="bu">print</span>(x)</span>
+<span id="cb31-5"><a href="" aria-label="5"></a></span>
+<span id="cb31-6"><a href="" aria-label="6"></a>y <span class="op">=</span> torch.tensor([[<span class="fl">0.1</span>, <span class="fl">1.2</span>], </span>
+<span id="cb31-7"><a href="" aria-label="7"></a>              [<span class="fl">2.2</span>, <span class="fl">3.1</span>], </span>
+<span id="cb31-8"><a href="" aria-label="8"></a>              [<span class="fl">4.9</span>, <span class="fl">5.2</span>]])</span>
+<span id="cb31-9"><a href="" aria-label="9"></a><span class="bu">print</span>(y)</span>
+<span id="cb31-10"><a href="" aria-label="10"></a></span>
+<span id="cb31-11"><a href="" aria-label="11"></a><span class="bu">print</span>(y.shape)</span>
+<span id="cb31-12"><a href="" aria-label="12"></a></span>
+<span id="cb31-13"><a href="" aria-label="13"></a><span class="bu">print</span>(y.size())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>tensor([[1, 2],
+        [3, 4],
+        [5, 6]])
+tensor([[0.1000, 1.2000],
+        [2.2000, 3.1000],
+        [4.9000, 5.2000]])
+torch.Size([3, 2])
+torch.Size([3, 2])</code></pre>
+</div>
+</div>
+<div id="9222f096" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;slideshow&quot;,&quot;value&quot;:{&quot;slide_type&quot;:&quot;slide&quot;}}" data-execution_count="16">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="" aria-label="1"></a>p <span class="op">=</span> torch.tensor([<span class="dv">0</span>, <span class="dv">1</span>])</span>
+<span id="cb33-2"><a href="" aria-label="2"></a><span class="bu">print</span>(p)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>tensor([0, 1])</code></pre>
+</div>
+</div>
+<div id="0cf5ca3d" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;slideshow&quot;,&quot;value&quot;:{&quot;slide_type&quot;:&quot;slide&quot;}}" data-execution_count="17">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="" aria-label="1"></a><span class="co"># creates a torch.cuda.DoubleTensor</span></span>
+<span id="cb35-2"><a href="" aria-label="2"></a><span class="cf">if</span> torch.cuda.is_available():</span>
+<span id="cb35-3"><a href="" aria-label="3"></a>  q <span class="op">=</span> torch.tensor([[<span class="fl">0.11111</span>, <span class="fl">0.222222</span>, <span class="fl">0.3333333</span>]], </span>
+<span id="cb35-4"><a href="" aria-label="4"></a>                      dtype<span class="op">=</span>torch.float64,</span>
+<span id="cb35-5"><a href="" aria-label="5"></a>                      device<span class="op">=</span>torch.device(<span class="st">'cuda:0'</span>))  </span>
+<span id="cb35-6"><a href="" aria-label="6"></a></span>
+<span id="cb35-7"><a href="" aria-label="7"></a>  <span class="bu">print</span>(q)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>tensor([[0.1111, 0.2222, 0.3333]], device='cuda:0', dtype=torch.float64)</code></pre>
+</div>
+</div>
+<div id="6915bab5" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;slideshow&quot;,&quot;value&quot;:{&quot;slide_type&quot;:&quot;slide&quot;}}" data-execution_count="18">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="" aria-label="1"></a><span class="co"># Create a scalar (zero-dimensional tensor)</span></span>
+<span id="cb37-2"><a href="" aria-label="2"></a>r <span class="op">=</span> torch.tensor(<span class="fl">3.14159</span>)  </span>
+<span id="cb37-3"><a href="" aria-label="3"></a><span class="bu">print</span>(r) </span>
+<span id="cb37-4"><a href="" aria-label="4"></a></span>
+<span id="cb37-5"><a href="" aria-label="5"></a><span class="co"># Create an empty tensor (of size (0,))</span></span>
+<span id="cb37-6"><a href="" aria-label="6"></a>s <span class="op">=</span> torch.tensor([])  </span>
+<span id="cb37-7"><a href="" aria-label="7"></a><span class="bu">print</span>(s)</span>
+<span id="cb37-8"><a href="" aria-label="8"></a></span>
+<span id="cb37-9"><a href="" aria-label="9"></a><span class="bu">print</span>(s.shape)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>tensor(3.1416)
+tensor([])
+torch.Size([0])</code></pre>
+</div>
+</div>
+</section>
+<section id="slicing-tensors" class="slide level2 scrollable">
+<h2>Slicing tensors</h2>
+<div id="0ca132a1" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;slideshow&quot;,&quot;value&quot;:{&quot;slide_type&quot;:&quot;slide&quot;}}" data-execution_count="19">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="" aria-label="1"></a>x <span class="op">=</span> torch.randn(<span class="dv">5</span>,<span class="dv">6</span>)</span>
+<span id="cb39-2"><a href="" aria-label="2"></a><span class="bu">print</span>(x)</span>
+<span id="cb39-3"><a href="" aria-label="3"></a></span>
+<span id="cb39-4"><a href="" aria-label="4"></a><span class="bu">print</span>(x.size())</span>
+<span id="cb39-5"><a href="" aria-label="5"></a><span class="bu">print</span>(x[:, <span class="dv">1</span>])</span>
+<span id="cb39-6"><a href="" aria-label="6"></a><span class="bu">print</span>(x[<span class="dv">0</span>, :])</span>
+<span id="cb39-7"><a href="" aria-label="7"></a></span>
+<span id="cb39-8"><a href="" aria-label="8"></a>y <span class="op">=</span> x[<span class="dv">1</span>, <span class="dv">1</span>]</span>
+<span id="cb39-9"><a href="" aria-label="9"></a><span class="bu">print</span>(y)</span>
+<span id="cb39-10"><a href="" aria-label="10"></a><span class="bu">print</span>(y.item())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>tensor([[ 0.4764,  1.9759, -0.7920, -1.8792, -1.3246,  0.8464],
+        [-0.9206, -0.3351,  0.2658, -0.8923,  0.6429, -0.3832],
+        [ 0.2577,  1.3343,  0.2247,  1.0453, -0.5810,  0.7944],
+        [-0.6087,  0.2109,  1.0521, -1.5308, -0.3970, -0.8757],
+        [-0.2773,  0.0379,  0.1448, -1.3124, -1.3097, -0.5497]])
+torch.Size([5, 6])
+tensor([ 1.9759, -0.3351,  1.3343,  0.2109,  0.0379])
+tensor([ 0.4764,  1.9759, -0.7920, -1.8792, -1.3246,  0.8464])
+tensor(-0.3351)
+-0.33507612347602844</code></pre>
+</div>
+</div>
+</section>
+<section id="reshaping-tensors" class="slide level2 scrollable">
+<h2>Reshaping tensors</h2>
+<ul>
+<li><code>view(shape)</code> – Returns a new tensor with the same data as the self tensor but of a different shape.
+<ul>
+<li>The returned tensor shares the same data and must have the same number of elements, but may have a different size.</li>
+</ul></li>
+</ul>
+<div id="d5539434" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;slideshow&quot;,&quot;value&quot;:{&quot;slide_type&quot;:&quot;slide&quot;}}" data-execution_count="20">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="" aria-label="1"></a>x <span class="op">=</span> torch.randn(<span class="dv">4</span>, <span class="dv">4</span>)</span>
+<span id="cb41-2"><a href="" aria-label="2"></a><span class="bu">print</span>(x)</span>
+<span id="cb41-3"><a href="" aria-label="3"></a></span>
+<span id="cb41-4"><a href="" aria-label="4"></a>y <span class="op">=</span> x.view(<span class="dv">8</span>, <span class="dv">2</span>)</span>
+<span id="cb41-5"><a href="" aria-label="5"></a><span class="bu">print</span>(y)</span>
+<span id="cb41-6"><a href="" aria-label="6"></a></span>
+<span id="cb41-7"><a href="" aria-label="7"></a>y <span class="op">=</span> x.view(<span class="dv">2</span>,<span class="op">-</span><span class="dv">1</span>) <span class="co"># the size -1 is inferred from other dimensions</span></span>
+<span id="cb41-8"><a href="" aria-label="8"></a><span class="bu">print</span>(y)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>tensor([[ 1.3602, -0.6687, -0.3541,  0.8659],
+        [ 0.6533,  0.2187, -2.4573,  0.9288],
+        [-0.4795,  0.6087, -1.3790,  2.3809],
+        [ 1.3905, -0.3161,  0.0607, -0.6909]])
+tensor([[ 1.3602, -0.6687],
+        [-0.3541,  0.8659],
+        [ 0.6533,  0.2187],
+        [-2.4573,  0.9288],
+        [-0.4795,  0.6087],
+        [-1.3790,  2.3809],
+        [ 1.3905, -0.3161],
+        [ 0.0607, -0.6909]])
+tensor([[ 1.3602, -0.6687, -0.3541,  0.8659,  0.6533,  0.2187, -2.4573,  0.9288],
+        [-0.4795,  0.6087, -1.3790,  2.3809,  1.3905, -0.3161,  0.0607, -0.6909]])</code></pre>
+</div>
+</div>
+</section>
+<section id="simple-tensor-operations" class="slide level2 scrollable">
+<h2>Simple Tensor Operations</h2>
+<ul>
+<li>Operations on tensors use similar syntax to <code>numpy</code>:</li>
+</ul>
+<div id="c5f144c6" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;slideshow&quot;,&quot;value&quot;:{&quot;slide_type&quot;:&quot;slide&quot;}}" data-execution_count="21">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="" aria-label="1"></a>x <span class="op">=</span> torch.ones([<span class="dv">3</span>, <span class="dv">2</span>])</span>
+<span id="cb43-2"><a href="" aria-label="2"></a>y <span class="op">=</span> torch.ones([<span class="dv">3</span>, <span class="dv">2</span>])</span>
+<span id="cb43-3"><a href="" aria-label="3"></a>z <span class="op">=</span> x <span class="op">+</span> y</span>
+<span id="cb43-4"><a href="" aria-label="4"></a><span class="bu">print</span>(z)</span>
+<span id="cb43-5"><a href="" aria-label="5"></a></span>
+<span id="cb43-6"><a href="" aria-label="6"></a><span class="bu">print</span>(<span class="st">"torch.add(x, y):</span><span class="ch">\n</span><span class="st">"</span>, torch.add(x, y))</span>
+<span id="cb43-7"><a href="" aria-label="7"></a></span>
+<span id="cb43-8"><a href="" aria-label="8"></a>z <span class="op">=</span> x <span class="op">-</span> y</span>
+<span id="cb43-9"><a href="" aria-label="9"></a><span class="bu">print</span>(z)</span>
+<span id="cb43-10"><a href="" aria-label="10"></a></span>
+<span id="cb43-11"><a href="" aria-label="11"></a><span class="co"># torch.sub(x,y)</span></span>
+<span id="cb43-12"><a href="" aria-label="12"></a><span class="co"># torch.subtract(x,y)</span></span>
+<span id="cb43-13"><a href="" aria-label="13"></a><span class="bu">print</span>(<span class="st">"torch.subtract(x, y):</span><span class="ch">\n</span><span class="st">"</span>, torch.sub(x, y))</span>
+<span id="cb43-14"><a href="" aria-label="14"></a></span>
+<span id="cb43-15"><a href="" aria-label="15"></a>z <span class="op">=</span> x <span class="op">*</span> y</span>
+<span id="cb43-16"><a href="" aria-label="16"></a><span class="bu">print</span>(z)</span>
+<span id="cb43-17"><a href="" aria-label="17"></a></span>
+<span id="cb43-18"><a href="" aria-label="18"></a><span class="co"># torch.mul(x,y)</span></span>
+<span id="cb43-19"><a href="" aria-label="19"></a><span class="co"># torch.multiply(x,y)</span></span>
+<span id="cb43-20"><a href="" aria-label="20"></a><span class="bu">print</span>(<span class="st">"torch.multiply(x, y):</span><span class="ch">\n</span><span class="st">"</span>, torch.multiply(x, y))</span>
+<span id="cb43-21"><a href="" aria-label="21"></a> </span>
+<span id="cb43-22"><a href="" aria-label="22"></a></span>
+<span id="cb43-23"><a href="" aria-label="23"></a>z <span class="op">=</span> x <span class="op">/</span> y</span>
+<span id="cb43-24"><a href="" aria-label="24"></a><span class="bu">print</span>(z)</span>
+<span id="cb43-25"><a href="" aria-label="25"></a></span>
+<span id="cb43-26"><a href="" aria-label="26"></a><span class="co"># torch.div(x,y)</span></span>
+<span id="cb43-27"><a href="" aria-label="27"></a><span class="co"># torch.divide(x,y)</span></span>
+<span id="cb43-28"><a href="" aria-label="28"></a><span class="bu">print</span>(<span class="st">"torch.divide(x, y):</span><span class="ch">\n</span><span class="st">"</span>, torch.divide(x, y))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>tensor([[2., 2.],
+        [2., 2.],
+        [2., 2.]])
+torch.add(x, y):
+ tensor([[2., 2.],
+        [2., 2.],
+        [2., 2.]])
+tensor([[0., 0.],
+        [0., 0.],
+        [0., 0.]])
+torch.subtract(x, y):
+ tensor([[0., 0.],
+        [0., 0.],
+        [0., 0.]])
+tensor([[1., 1.],
+        [1., 1.],
+        [1., 1.]])
+torch.multiply(x, y):
+ tensor([[1., 1.],
+        [1., 1.],
+        [1., 1.]])
+tensor([[1., 1.],
+        [1., 1.],
+        [1., 1.]])
+torch.divide(x, y):
+ tensor([[1., 1.],
+        [1., 1.],
+        [1., 1.]])</code></pre>
+</div>
+</div>
+<ul>
+<li>PyTorch also supports in-place operations (method names end in ’_’):</li>
+</ul>
+<div id="3f7255ee" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;slideshow&quot;,&quot;value&quot;:{&quot;slide_type&quot;:&quot;slide&quot;}}" data-execution_count="22">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="" aria-label="1"></a>x <span class="op">=</span> torch.randn(<span class="dv">2</span>,<span class="dv">3</span>)</span>
+<span id="cb45-2"><a href="" aria-label="2"></a>y <span class="op">=</span> torch.ones_like(x)</span>
+<span id="cb45-3"><a href="" aria-label="3"></a><span class="bu">print</span>(x)</span>
+<span id="cb45-4"><a href="" aria-label="4"></a><span class="bu">print</span>(y)</span>
+<span id="cb45-5"><a href="" aria-label="5"></a></span>
+<span id="cb45-6"><a href="" aria-label="6"></a><span class="bu">print</span>(x <span class="op">+</span> y)</span>
+<span id="cb45-7"><a href="" aria-label="7"></a></span>
+<span id="cb45-8"><a href="" aria-label="8"></a>y.add_(x)</span>
+<span id="cb45-9"><a href="" aria-label="9"></a><span class="bu">print</span>(y)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>tensor([[-1.1520, -0.6977,  0.6147],
+        [ 0.0565, -0.3884,  0.8755]])
+tensor([[1., 1., 1.],
+        [1., 1., 1.]])
+tensor([[-0.1520,  0.3023,  1.6147],
+        [ 1.0565,  0.6116,  1.8755]])
+tensor([[-0.1520,  0.3023,  1.6147],
+        [ 1.0565,  0.6116,  1.8755]])</code></pre>
+</div>
+</div>
+</section>
+<section id="broadcasting" class="slide level2 scrollable">
+<h2>Broadcasting</h2>
+<p>To learn more: - https://numpy.org/doc/stable/user/basics.broadcasting.html - https://pytorch.org/docs/stable/notes/broadcasting.html</p>
+<div id="5b42dd48" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;slideshow&quot;,&quot;value&quot;:{&quot;slide_type&quot;:&quot;-&quot;}}" data-execution_count="23">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="" aria-label="1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb47-2"><a href="" aria-label="2"></a>x <span class="op">=</span> np.ones((<span class="dv">5</span>,<span class="dv">3</span>))</span>
+<span id="cb47-3"><a href="" aria-label="3"></a>y <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb47-4"><a href="" aria-label="4"></a><span class="bu">print</span>(<span class="st">"x + y:</span><span class="ch">\n</span><span class="st">"</span>, x <span class="op">+</span> y)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>x + y:
+ [[2. 2. 2.]
+ [2. 2. 2.]
+ [2. 2. 2.]
+ [2. 2. 2.]
+ [2. 2. 2.]]</code></pre>
+</div>
+</div>
+<div id="ec0879b4" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;slideshow&quot;,&quot;value&quot;:{&quot;slide_type&quot;:&quot;slide&quot;}}" data-execution_count="24">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="" aria-label="1"></a>x <span class="op">=</span> torch.ones(<span class="dv">5</span>, <span class="dv">3</span>)</span>
+<span id="cb49-2"><a href="" aria-label="2"></a>y <span class="op">=</span> torch.ones(<span class="dv">5</span>, <span class="dv">1</span>)</span>
+<span id="cb49-3"><a href="" aria-label="3"></a><span class="bu">print</span>(<span class="st">"x + y:</span><span class="ch">\n</span><span class="st">"</span>, x <span class="op">+</span> y)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>x + y:
+ tensor([[2., 2., 2.],
+        [2., 2., 2.],
+        [2., 2., 2.],
+        [2., 2., 2.],
+        [2., 2., 2.]])</code></pre>
+</div>
+</div>
+<div id="3ed1e9d2" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;slideshow&quot;,&quot;value&quot;:{&quot;slide_type&quot;:&quot;slide&quot;}}" data-execution_count="25">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb51"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="" aria-label="1"></a><span class="co"># failed case of conflicting dimension.</span></span>
+<span id="cb51-2"><a href="" aria-label="2"></a><span class="co"># x = torch.ones(5, 3)</span></span>
+<span id="cb51-3"><a href="" aria-label="3"></a><span class="co"># y = torch.ones(3, 5)</span></span>
+<span id="cb51-4"><a href="" aria-label="4"></a><span class="co"># print("x + y:", x + y)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="suminput" class="slide level2">
+<h2><code class="scrollable">sum(input)</code></h2>
+<ul>
+<li>Returns the sum of all elements in the input tensor.</li>
+</ul>
+<div id="721fa6d4" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;ExecuteTime&quot;,&quot;value&quot;:{&quot;end_time&quot;:&quot;2022-03-10T05:39:23.797989Z&quot;,&quot;start_time&quot;:&quot;2022-03-10T05:39:23.794600Z&quot;}}" data-execution_count="26">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb52"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="" aria-label="1"></a>x <span class="op">=</span> torch.ones(<span class="dv">4</span>,<span class="dv">5</span>)</span>
+<span id="cb52-2"><a href="" aria-label="2"></a>x <span class="op">=</span> x.<span class="bu">sum</span>()</span>
+<span id="cb52-3"><a href="" aria-label="3"></a><span class="bu">print</span>(x)</span>
+<span id="cb52-4"><a href="" aria-label="4"></a><span class="bu">print</span>(x.item())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>tensor(20.)
+20.0</code></pre>
+</div>
+</div>
+</section>
+<section id="concatenating-two-matrices-together" class="slide level2 scrollable">
+<h2>Concatenating two matrices together</h2>
+<ul>
+<li><code>cat(tensors,dim)</code> – Concatenates the given sequence of seq tensors in the given dimension, <code>dim</code>.
+<ul>
+<li>All tensors must either have the same shape (except in the concatenating dimension) or be empty.</li>
+</ul></li>
+</ul>
+<div id="c2d20876" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;ExecuteTime&quot;,&quot;value&quot;:{&quot;end_time&quot;:&quot;2022-03-10T05:41:45.702276Z&quot;,&quot;start_time&quot;:&quot;2022-03-10T05:41:45.696026Z&quot;}}" data-execution_count="27">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb54"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb54-1"><a href="" aria-label="1"></a>x <span class="op">=</span> torch.ones(<span class="dv">5</span>, <span class="dv">3</span>)</span>
+<span id="cb54-2"><a href="" aria-label="2"></a>y <span class="op">=</span> torch.zeros(<span class="dv">5</span>, <span class="dv">2</span>)</span>
+<span id="cb54-3"><a href="" aria-label="3"></a><span class="bu">print</span>(torch.cat([x, y], dim<span class="op">=</span><span class="dv">1</span>))</span>
+<span id="cb54-4"><a href="" aria-label="4"></a><span class="co"># wrong:</span></span>
+<span id="cb54-5"><a href="" aria-label="5"></a><span class="co"># print(torch.cat([x, y], dim=0))</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>tensor([[1., 1., 1., 0., 0.],
+        [1., 1., 1., 0., 0.],
+        [1., 1., 1., 0., 0.],
+        [1., 1., 1., 0., 0.],
+        [1., 1., 1., 0., 0.]])</code></pre>
+</div>
+</div>
+<div id="509559eb" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;slideshow&quot;,&quot;value&quot;:{&quot;slide_type&quot;:&quot;slide&quot;}}" data-execution_count="28">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb56"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb56-1"><a href="" aria-label="1"></a>x <span class="op">=</span> torch.randn(<span class="dv">2</span>, <span class="dv">3</span>)</span>
+<span id="cb56-2"><a href="" aria-label="2"></a><span class="bu">print</span>(x)</span>
+<span id="cb56-3"><a href="" aria-label="3"></a></span>
+<span id="cb56-4"><a href="" aria-label="4"></a>y <span class="op">=</span> torch.cat((x, x, x), dim<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb56-5"><a href="" aria-label="5"></a><span class="bu">print</span>(y)</span>
+<span id="cb56-6"><a href="" aria-label="6"></a></span>
+<span id="cb56-7"><a href="" aria-label="7"></a>z <span class="op">=</span> torch.cat((x, x, x), dim<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb56-8"><a href="" aria-label="8"></a><span class="bu">print</span>(z)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>tensor([[ 0.5838, -0.8360,  0.4697],
+        [-0.0410,  0.5529,  0.7312]])
+tensor([[ 0.5838, -0.8360,  0.4697],
+        [-0.0410,  0.5529,  0.7312],
+        [ 0.5838, -0.8360,  0.4697],
+        [-0.0410,  0.5529,  0.7312],
+        [ 0.5838, -0.8360,  0.4697],
+        [-0.0410,  0.5529,  0.7312]])
+tensor([[ 0.5838, -0.8360,  0.4697,  0.5838, -0.8360,  0.4697,  0.5838, -0.8360,
+          0.4697],
+        [-0.0410,  0.5529,  0.7312, -0.0410,  0.5529,  0.7312, -0.0410,  0.5529,
+          0.7312]])</code></pre>
+</div>
+</div>
+</section>
+<section id="converting-between-numpy-arrays-and-pytorch-tensors" class="slide level2 scrollable">
+<h2>Converting between NumPy arrays and PyTorch Tensors</h2>
+<ul>
+<li>Important: PyTorch Tensors and NumPy arrays will share the same underlying memory locations.
+<ul>
+<li>If you change values for one, the values for the other will be changed too.</li>
+</ul></li>
+<li>Convert PyTorch Tensor to NumPy array:
+<ul>
+<li><strong>such conversion requires source tensor to be on CPU.</strong></li>
+</ul></li>
+</ul>
+<div id="acbd0679" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;slideshow&quot;,&quot;value&quot;:{&quot;slide_type&quot;:&quot;slide&quot;}}" data-execution_count="29">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb58"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb58-1"><a href="" aria-label="1"></a>a <span class="op">=</span> torch.ones(<span class="dv">5</span>)</span>
+<span id="cb58-2"><a href="" aria-label="2"></a><span class="bu">print</span>(a)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>tensor([1., 1., 1., 1., 1.])</code></pre>
+</div>
+</div>
+<div id="a6509845" class="cell" data-execution_count="30">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb60"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb60-1"><a href="" aria-label="1"></a>a.detach</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="30">
+<pre><code>&lt;function Tensor.detach&gt;</code></pre>
+</div>
+</div>
+<div id="516b24a1" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;slideshow&quot;,&quot;value&quot;:{&quot;slide_type&quot;:&quot;slide&quot;}}" data-execution_count="31">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb62"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb62-1"><a href="" aria-label="1"></a>a.add_(<span class="dv">1</span>)</span>
+<span id="cb62-2"><a href="" aria-label="2"></a><span class="bu">print</span>(a)</span>
+<span id="cb62-3"><a href="" aria-label="3"></a><span class="bu">print</span>(b)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>tensor([2., 2., 2., 2., 2.])
+0.9993399630343945</code></pre>
+</div>
+</div>
+<ul>
+<li>Now, convert NumPy array to PyTorch Tensor:</li>
+</ul>
+<div id="55af8017" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;ExecuteTime&quot;,&quot;value&quot;:{&quot;end_time&quot;:&quot;2022-03-10T05:47:04.606371Z&quot;,&quot;start_time&quot;:&quot;2022-03-10T05:47:04.594567Z&quot;}}" data-execution_count="32">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb64"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb64-1"><a href="" aria-label="1"></a>a <span class="op">=</span> np.ones(<span class="dv">5</span>)</span>
+<span id="cb64-2"><a href="" aria-label="2"></a>b <span class="op">=</span> torch.from_numpy(a)</span>
+<span id="cb64-3"><a href="" aria-label="3"></a>np.add(a, <span class="dv">1</span>, out<span class="op">=</span>a)</span>
+<span id="cb64-4"><a href="" aria-label="4"></a><span class="bu">print</span>(a)</span>
+<span id="cb64-5"><a href="" aria-label="5"></a><span class="bu">print</span>(b)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[2. 2. 2. 2. 2.]
+tensor([2., 2., 2., 2., 2.], dtype=torch.float64)</code></pre>
+</div>
+</div>
+</section>
+<section id="numpy-neq-pytorch" class="slide level2 scrollable">
+<h2>Numpy <span class="math inline">\(\neq\)</span> PyTorch</h2>
+<div id="efcf87ec" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;slideshow&quot;,&quot;value&quot;:{&quot;slide_type&quot;:&quot;slide&quot;}}" data-execution_count="33">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb66"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb66-1"><a href="" aria-label="1"></a>x <span class="op">=</span> torch.ones(<span class="dv">3</span>,<span class="dv">2</span>)</span>
+<span id="cb66-2"><a href="" aria-label="2"></a><span class="bu">print</span>(x)</span>
+<span id="cb66-3"><a href="" aria-label="3"></a></span>
+<span id="cb66-4"><a href="" aria-label="4"></a>x_np <span class="op">=</span> x.numpy()</span>
+<span id="cb66-5"><a href="" aria-label="5"></a><span class="bu">print</span>(<span class="bu">type</span>(x), <span class="bu">type</span>(x_np))</span>
+<span id="cb66-6"><a href="" aria-label="6"></a><span class="bu">print</span>(x_np)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>tensor([[1., 1.],
+        [1., 1.],
+        [1., 1.]])
+&lt;class 'torch.Tensor'&gt; &lt;class 'numpy.ndarray'&gt;
+[[1. 1.]
+ [1. 1.]
+ [1. 1.]]</code></pre>
+</div>
+</div>
+<div id="2f194a98" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;slideshow&quot;,&quot;value&quot;:{&quot;slide_type&quot;:&quot;slide&quot;}}" data-execution_count="34">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb68"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb68-1"><a href="" aria-label="1"></a>a <span class="op">=</span> np.random.randn(<span class="dv">5</span>)</span>
+<span id="cb68-2"><a href="" aria-label="2"></a><span class="bu">print</span>(a)</span>
+<span id="cb68-3"><a href="" aria-label="3"></a>a_pt <span class="op">=</span> torch.from_numpy(a)</span>
+<span id="cb68-4"><a href="" aria-label="4"></a><span class="bu">print</span>(<span class="bu">type</span>(a), <span class="bu">type</span>(a_pt))</span>
+<span id="cb68-5"><a href="" aria-label="5"></a><span class="bu">print</span>(a_pt)</span>
+<span id="cb68-6"><a href="" aria-label="6"></a></span>
+<span id="cb68-7"><a href="" aria-label="7"></a>np.add(a, <span class="dv">1</span>, out<span class="op">=</span>a)</span>
+<span id="cb68-8"><a href="" aria-label="8"></a><span class="bu">print</span>(a)</span>
+<span id="cb68-9"><a href="" aria-label="9"></a><span class="bu">print</span>(a_pt) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[-0.38508929 -0.03432941  0.49487371 -1.45665746  1.43766023]
+&lt;class 'numpy.ndarray'&gt; &lt;class 'torch.Tensor'&gt;
+tensor([-0.3851, -0.0343,  0.4949, -1.4567,  1.4377], dtype=torch.float64)
+[ 0.61491071  0.96567059  1.49487371 -0.45665746  2.43766023]
+tensor([ 0.6149,  0.9657,  1.4949, -0.4567,  2.4377], dtype=torch.float64)</code></pre>
+</div>
+</div>
+</section>
+<section id="similar-pytorch-operations-are-highly-optimized-than-numpys" class="slide level2 scrollable">
+<h2>Similar PyTorch operations are highly optimized than NumPy’s</h2>
+<div id="9741905e" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;slideshow&quot;,&quot;value&quot;:{&quot;slide_type&quot;:&quot;slide&quot;}}" data-execution_count="35">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb70"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb70-1"><a href="" aria-label="1"></a><span class="im">import</span> time</span>
+<span id="cb70-2"><a href="" aria-label="2"></a>cpu_start <span class="op">=</span> time.process_time()      <span class="co"># Measures CPU time (process only)</span></span>
+<span id="cb70-3"><a href="" aria-label="3"></a>wall_start <span class="op">=</span> time.perf_counter()    <span class="co"># Measures Wall time (highest resolution)</span></span>
+<span id="cb70-4"><a href="" aria-label="4"></a></span>
+<span id="cb70-5"><a href="" aria-label="5"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">100</span>):</span>
+<span id="cb70-6"><a href="" aria-label="6"></a>    a <span class="op">=</span> np.random.randn(<span class="dv">100</span>,<span class="dv">100</span>)</span>
+<span id="cb70-7"><a href="" aria-label="7"></a>    b <span class="op">=</span> np.random.randn(<span class="dv">100</span>,<span class="dv">100</span>)</span>
+<span id="cb70-8"><a href="" aria-label="8"></a>    c <span class="op">=</span> np.matmul(a, b)</span>
+<span id="cb70-9"><a href="" aria-label="9"></a></span>
+<span id="cb70-10"><a href="" aria-label="10"></a>cpu_end <span class="op">=</span> time.process_time()</span>
+<span id="cb70-11"><a href="" aria-label="11"></a>wall_end <span class="op">=</span> time.perf_counter()</span>
+<span id="cb70-12"><a href="" aria-label="12"></a></span>
+<span id="cb70-13"><a href="" aria-label="13"></a>cpu_duration <span class="op">=</span> cpu_end <span class="op">-</span> cpu_start</span>
+<span id="cb70-14"><a href="" aria-label="14"></a>wall_duration <span class="op">=</span> wall_end <span class="op">-</span> wall_start</span>
+<span id="cb70-15"><a href="" aria-label="15"></a></span>
+<span id="cb70-16"><a href="" aria-label="16"></a><span class="bu">print</span>(<span class="ss">f"CPU times: total: </span><span class="sc">{</span>cpu_duration <span class="op">*</span> <span class="dv">1000</span><span class="sc">:.0f}</span><span class="ss"> ms"</span>)</span>
+<span id="cb70-17"><a href="" aria-label="17"></a><span class="bu">print</span>(<span class="ss">f"Wall time: </span><span class="sc">{</span>wall_duration <span class="op">*</span> <span class="dv">1000</span><span class="sc">:.0f}</span><span class="ss"> ms"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>CPU times: total: 636 ms
+Wall time: 81 ms</code></pre>
+</div>
+</div>
+<div id="65cf9ffb" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;slideshow&quot;,&quot;value&quot;:{&quot;slide_type&quot;:&quot;slide&quot;}}" data-execution_count="36">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb72"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb72-1"><a href="" aria-label="1"></a>cpu_start <span class="op">=</span> time.process_time()      <span class="co"># Measures CPU time (process only)</span></span>
+<span id="cb72-2"><a href="" aria-label="2"></a>wall_start <span class="op">=</span> time.perf_counter()    <span class="co"># Measures Wall time (highest resolution)</span></span>
+<span id="cb72-3"><a href="" aria-label="3"></a></span>
+<span id="cb72-4"><a href="" aria-label="4"></a></span>
+<span id="cb72-5"><a href="" aria-label="5"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">100</span>):</span>
+<span id="cb72-6"><a href="" aria-label="6"></a>    a <span class="op">=</span> torch.randn([<span class="dv">100</span>, <span class="dv">100</span>])</span>
+<span id="cb72-7"><a href="" aria-label="7"></a>    b <span class="op">=</span> torch.randn([<span class="dv">100</span>, <span class="dv">100</span>])</span>
+<span id="cb72-8"><a href="" aria-label="8"></a>    c <span class="op">=</span> torch.matmul(a, b)</span>
+<span id="cb72-9"><a href="" aria-label="9"></a></span>
+<span id="cb72-10"><a href="" aria-label="10"></a>cpu_end <span class="op">=</span> time.process_time()</span>
+<span id="cb72-11"><a href="" aria-label="11"></a>wall_end <span class="op">=</span> time.perf_counter()</span>
+<span id="cb72-12"><a href="" aria-label="12"></a></span>
+<span id="cb72-13"><a href="" aria-label="13"></a>cpu_duration <span class="op">=</span> cpu_end <span class="op">-</span> cpu_start</span>
+<span id="cb72-14"><a href="" aria-label="14"></a>wall_duration <span class="op">=</span> wall_end <span class="op">-</span> wall_start</span>
+<span id="cb72-15"><a href="" aria-label="15"></a></span>
+<span id="cb72-16"><a href="" aria-label="16"></a><span class="bu">print</span>(<span class="ss">f"CPU times: total: </span><span class="sc">{</span>cpu_duration <span class="op">*</span> <span class="dv">1000</span><span class="sc">:.0f}</span><span class="ss"> ms"</span>)</span>
+<span id="cb72-17"><a href="" aria-label="17"></a><span class="bu">print</span>(<span class="ss">f"Wall time: </span><span class="sc">{</span>wall_duration <span class="op">*</span> <span class="dv">1000</span><span class="sc">:.0f}</span><span class="ss"> ms"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>CPU times: total: 201 ms
+Wall time: 25 ms</code></pre>
+</div>
+</div>
+<div id="4825a7a3" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;slideshow&quot;,&quot;value&quot;:{&quot;slide_type&quot;:&quot;slide&quot;}}" data-execution_count="37">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb74"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb74-1"><a href="" aria-label="1"></a>cpu_start <span class="op">=</span> time.process_time()      <span class="co"># Measures CPU time (process only)</span></span>
+<span id="cb74-2"><a href="" aria-label="2"></a>wall_start <span class="op">=</span> time.perf_counter()    <span class="co"># Measures Wall time (highest resolution)</span></span>
+<span id="cb74-3"><a href="" aria-label="3"></a></span>
+<span id="cb74-4"><a href="" aria-label="4"></a></span>
+<span id="cb74-5"><a href="" aria-label="5"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">10</span>):</span>
+<span id="cb74-6"><a href="" aria-label="6"></a>    a <span class="op">=</span> np.random.randn(<span class="dv">10000</span>,<span class="dv">10000</span>)</span>
+<span id="cb74-7"><a href="" aria-label="7"></a>    b <span class="op">=</span> np.random.randn(<span class="dv">10000</span>,<span class="dv">10000</span>)</span>
+<span id="cb74-8"><a href="" aria-label="8"></a>    c <span class="op">=</span> a <span class="op">+</span> b</span>
+<span id="cb74-9"><a href="" aria-label="9"></a></span>
+<span id="cb74-10"><a href="" aria-label="10"></a>cpu_end <span class="op">=</span> time.process_time()</span>
+<span id="cb74-11"><a href="" aria-label="11"></a>wall_end <span class="op">=</span> time.perf_counter()</span>
+<span id="cb74-12"><a href="" aria-label="12"></a></span>
+<span id="cb74-13"><a href="" aria-label="13"></a>cpu_duration <span class="op">=</span> cpu_end <span class="op">-</span> cpu_start</span>
+<span id="cb74-14"><a href="" aria-label="14"></a>wall_duration <span class="op">=</span> wall_end <span class="op">-</span> wall_start</span>
+<span id="cb74-15"><a href="" aria-label="15"></a></span>
+<span id="cb74-16"><a href="" aria-label="16"></a><span class="bu">print</span>(<span class="ss">f"CPU times: total: </span><span class="sc">{</span>cpu_duration <span class="op">*</span> <span class="dv">1000</span><span class="sc">:.0f}</span><span class="ss"> ms"</span>)</span>
+<span id="cb74-17"><a href="" aria-label="17"></a><span class="bu">print</span>(<span class="ss">f"Wall time: </span><span class="sc">{</span>wall_duration <span class="op">*</span> <span class="dv">1000</span><span class="sc">:.0f}</span><span class="ss"> ms"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>CPU times: total: 34798 ms
+Wall time: 34721 ms</code></pre>
+</div>
+</div>
+<div id="504bab90" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;slideshow&quot;,&quot;value&quot;:{&quot;slide_type&quot;:&quot;-&quot;}}" data-execution_count="38">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb76"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb76-1"><a href="" aria-label="1"></a><span class="kw">del</span> a</span>
+<span id="cb76-2"><a href="" aria-label="2"></a><span class="kw">del</span> b</span>
+<span id="cb76-3"><a href="" aria-label="3"></a><span class="kw">del</span> c</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="2c2cdce1" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;slideshow&quot;,&quot;value&quot;:{&quot;slide_type&quot;:&quot;slide&quot;}}" data-execution_count="39">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb77"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb77-1"><a href="" aria-label="1"></a>cpu_start <span class="op">=</span> time.process_time()      <span class="co"># Measures CPU time (process only)</span></span>
+<span id="cb77-2"><a href="" aria-label="2"></a>wall_start <span class="op">=</span> time.perf_counter()    <span class="co"># Measures Wall time (highest resolution)</span></span>
+<span id="cb77-3"><a href="" aria-label="3"></a></span>
+<span id="cb77-4"><a href="" aria-label="4"></a></span>
+<span id="cb77-5"><a href="" aria-label="5"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">10</span>):</span>
+<span id="cb77-6"><a href="" aria-label="6"></a>    a <span class="op">=</span> torch.randn([<span class="dv">10000</span>, <span class="dv">10000</span>])</span>
+<span id="cb77-7"><a href="" aria-label="7"></a>    b <span class="op">=</span> torch.randn([<span class="dv">10000</span>, <span class="dv">10000</span>])</span>
+<span id="cb77-8"><a href="" aria-label="8"></a>    c <span class="op">=</span> a <span class="op">+</span> b</span>
+<span id="cb77-9"><a href="" aria-label="9"></a></span>
+<span id="cb77-10"><a href="" aria-label="10"></a>cpu_end <span class="op">=</span> time.process_time()</span>
+<span id="cb77-11"><a href="" aria-label="11"></a>wall_end <span class="op">=</span> time.perf_counter()</span>
+<span id="cb77-12"><a href="" aria-label="12"></a></span>
+<span id="cb77-13"><a href="" aria-label="13"></a>cpu_duration <span class="op">=</span> cpu_end <span class="op">-</span> cpu_start</span>
+<span id="cb77-14"><a href="" aria-label="14"></a>wall_duration <span class="op">=</span> wall_end <span class="op">-</span> wall_start</span>
+<span id="cb77-15"><a href="" aria-label="15"></a></span>
+<span id="cb77-16"><a href="" aria-label="16"></a><span class="bu">print</span>(<span class="ss">f"CPU times: total: </span><span class="sc">{</span>cpu_duration <span class="op">*</span> <span class="dv">1000</span><span class="sc">:.0f}</span><span class="ss"> ms"</span>)</span>
+<span id="cb77-17"><a href="" aria-label="17"></a><span class="bu">print</span>(<span class="ss">f"Wall time: </span><span class="sc">{</span>wall_duration <span class="op">*</span> <span class="dv">1000</span><span class="sc">:.0f}</span><span class="ss"> ms"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>CPU times: total: 13754 ms
+Wall time: 11734 ms</code></pre>
+</div>
+</div>
+</section>
+<section id="cuda-tensors-on-gpu" class="slide level2 scrollable">
+<h2>CUDA Tensors (On GPU)</h2>
+<ul>
+<li><p>PyTorch tensors have the added benefit that they can easily be placed on a GPU to speed up computations.</p></li>
+<li><p>Query information about the GPU (if CUDA is available):</p></li>
+</ul>
+<div id="2ce30fb3" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;ExecuteTime&quot;,&quot;value&quot;:{&quot;end_time&quot;:&quot;2022-03-10T05:51:45.413955Z&quot;,&quot;start_time&quot;:&quot;2022-03-10T05:51:45.214397Z&quot;}}" data-execution_count="41">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb79"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb79-1"><a href="" aria-label="1"></a><span class="cf">if</span> torch.cuda.is_available():</span>
+<span id="cb79-2"><a href="" aria-label="2"></a>    <span class="op">!</span>nvidia<span class="op">-</span>smi</span>
+<span id="cb79-3"><a href="" aria-label="3"></a><span class="cf">else</span>:</span>
+<span id="cb79-4"><a href="" aria-label="4"></a>  <span class="bu">print</span>(<span class="st">'cuda compatible device is unavailable!'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>/bin/bash: /home/abxofkb/.conda/envs/venv-p310-torch2/lib/libtinfo.so.6: no version information available (required by /bin/bash)
+Tue Sep 15 11:55:27 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 570.211.01             Driver Version: 570.211.01     CUDA Version: 12.8     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA GeForce GTX 1080        Off |   00000000:01:00.0  On |                  N/A |
+|  0%   45C    P8             13W /  180W |     660MiB /   8192MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+                                                                                         
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|    0   N/A  N/A            4484      G   /usr/lib/xorg/Xorg                      231MiB |
+|    0   N/A  N/A            4700      G   /usr/bin/gnome-shell                     37MiB |
+|    0   N/A  N/A            5269      G   ...exec/xdg-desktop-portal-gnome        103MiB |
+|    0   N/A  N/A         1741057      G   .../8863/usr/lib/firefox/firefox        126MiB |
+|    0   N/A  N/A         1743113      G   /usr/bin/nautilus                        13MiB |
+|    0   N/A  N/A         1744717      G   /usr/bin/gnome-text-editor               13MiB |
+|    0   N/A  N/A         1746009      C   ...s/venv-p310-torch2/bin/python        118MiB |
++-----------------------------------------------------------------------------------------+</code></pre>
+</div>
+</div>
+<div id="310a37be" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;slideshow&quot;,&quot;value&quot;:{&quot;slide_type&quot;:&quot;slide&quot;}}" data-execution_count="42">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb81"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb81-1"><a href="" aria-label="1"></a><span class="cf">if</span> torch.cuda.is_available():</span>
+<span id="cb81-2"><a href="" aria-label="2"></a>  <span class="bu">print</span>(<span class="ss">f'number of cuda compatible devices available: </span><span class="sc">{</span>torch<span class="sc">.</span>cuda<span class="sc">.</span>device_count()<span class="sc">}</span><span class="ss">'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>number of cuda compatible devices available: 1</code></pre>
+</div>
+</div>
+<div id="49685876" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;slideshow&quot;,&quot;value&quot;:{&quot;slide_type&quot;:&quot;slide&quot;}}" data-execution_count="43">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb83"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb83-1"><a href="" aria-label="1"></a><span class="cf">if</span> torch.cuda.is_available():</span>
+<span id="cb83-2"><a href="" aria-label="2"></a>  <span class="bu">print</span>(torch.cuda.device(<span class="dv">0</span>))</span>
+<span id="cb83-3"><a href="" aria-label="3"></a>  <span class="bu">print</span>(torch.cuda.get_device_name(<span class="dv">0</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;torch.cuda.device object at 0x7d522e0351b0&gt;
+NVIDIA GeForce GTX 1080</code></pre>
+</div>
+</div>
+<div id="13c09b55" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;slideshow&quot;,&quot;value&quot;:{&quot;slide_type&quot;:&quot;slide&quot;}}" data-execution_count="44">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb85"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb85-1"><a href="" aria-label="1"></a><span class="co">#assign to a variable</span></span>
+<span id="cb85-2"><a href="" aria-label="2"></a><span class="cf">if</span> torch.cuda.is_available():</span>
+<span id="cb85-3"><a href="" aria-label="3"></a>  cuda0 <span class="op">=</span> torch.device(<span class="st">'cuda:0'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="f039b631" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;slideshow&quot;,&quot;value&quot;:{&quot;slide_type&quot;:&quot;slide&quot;}}" data-execution_count="45">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb86"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb86-1"><a href="" aria-label="1"></a><span class="cf">if</span> torch.cuda.is_available():</span>
+<span id="cb86-2"><a href="" aria-label="2"></a>  a <span class="op">=</span> torch.ones(<span class="dv">3</span>, <span class="dv">2</span>, device<span class="op">=</span>cuda0)</span>
+<span id="cb86-3"><a href="" aria-label="3"></a>  b <span class="op">=</span> torch.ones(<span class="dv">3</span>, <span class="dv">2</span>, device<span class="op">=</span>cuda0)</span>
+<span id="cb86-4"><a href="" aria-label="4"></a>  c <span class="op">=</span> a <span class="op">+</span> b</span>
+<span id="cb86-5"><a href="" aria-label="5"></a>  <span class="bu">print</span>(c)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>tensor([[2., 2.],
+        [2., 2.],
+        [2., 2.]], device='cuda:0')</code></pre>
+</div>
+</div>
+<div id="81019504" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{}}" data-execution_count="46">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb88"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb88-1"><a href="" aria-label="1"></a><span class="cf">if</span> torch.cuda.is_available():</span>
+<span id="cb88-2"><a href="" aria-label="2"></a>  c <span class="op">=</span> c.cpu()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="f6ca47fa" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;,&quot;height&quot;:70}}" data-execution_count="47">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb89"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb89-1"><a href="" aria-label="1"></a><span class="cf">if</span> torch.cuda.is_available():</span>
+<span id="cb89-2"><a href="" aria-label="2"></a>  <span class="bu">print</span>(c)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>tensor([[2., 2.],
+        [2., 2.],
+        [2., 2.]])</code></pre>
+</div>
+</div>
+<div id="94b0d7c0" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;,&quot;height&quot;:70}}" data-execution_count="48">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb91"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb91-1"><a href="" aria-label="1"></a><span class="cf">if</span> torch.cuda.is_available():</span>
+<span id="cb91-2"><a href="" aria-label="2"></a>  <span class="bu">print</span>(a)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>tensor([[1., 1.],
+        [1., 1.],
+        [1., 1.]], device='cuda:0')</code></pre>
+</div>
+</div>
+<div id="6ac8f758" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;slideshow&quot;,&quot;value&quot;:{&quot;slide_type&quot;:&quot;slide&quot;}}" data-execution_count="49">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb93"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb93-1"><a href="" aria-label="1"></a>x <span class="op">=</span> torch.randn(<span class="dv">100</span>,<span class="dv">100</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="f56ee1d4" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;slideshow&quot;,&quot;value&quot;:{&quot;slide_type&quot;:&quot;-&quot;}}" data-execution_count="50">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb94"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb94-1"><a href="" aria-label="1"></a><span class="cf">if</span> torch.cuda.is_available():</span>
+<span id="cb94-2"><a href="" aria-label="2"></a>    device <span class="op">=</span> torch.device(<span class="st">"cuda"</span>)          <span class="co"># a CUDA device object</span></span>
+<span id="cb94-3"><a href="" aria-label="3"></a>    y <span class="op">=</span> torch.ones_like(x, device<span class="op">=</span>device)  <span class="co"># directly create a tensor on GPU</span></span>
+<span id="cb94-4"><a href="" aria-label="4"></a>    x <span class="op">=</span> x.to(device)                       <span class="co"># or just use strings `.to("cuda")`</span></span>
+<span id="cb94-5"><a href="" aria-label="5"></a>    z <span class="op">=</span> x <span class="op">+</span> y</span>
+<span id="cb94-6"><a href="" aria-label="6"></a>    <span class="bu">print</span>(z)</span>
+<span id="cb94-7"><a href="" aria-label="7"></a>    <span class="bu">print</span>(z.to(<span class="st">"cpu"</span>, torch.double))       <span class="co"># `.to` can also change dtype</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>tensor([[ 3.6808,  1.3275,  1.7925,  ...,  1.0677,  1.6228,  2.1056],
+        [ 1.2713,  0.1924,  0.5106,  ...,  0.5543,  1.3060,  0.6370],
+        [ 0.4754,  2.4045,  1.6011,  ...,  2.2102,  1.9286,  1.4993],
+        ...,
+        [ 0.3970,  1.0706,  1.9471,  ...,  2.8693, -0.0562,  0.8810],
+        [-0.4333,  1.8274,  0.9703,  ...,  0.8871,  1.6090,  2.0814],
+        [ 1.0955,  2.4617, -0.2292,  ...,  2.0558,  0.6303,  2.8721]],
+       device='cuda:0')
+tensor([[ 3.6808,  1.3275,  1.7925,  ...,  1.0677,  1.6228,  2.1056],
+        [ 1.2713,  0.1924,  0.5106,  ...,  0.5543,  1.3060,  0.6370],
+        [ 0.4754,  2.4045,  1.6011,  ...,  2.2102,  1.9286,  1.4993],
+        ...,
+        [ 0.3970,  1.0706,  1.9471,  ...,  2.8693, -0.0562,  0.8810],
+        [-0.4333,  1.8274,  0.9703,  ...,  0.8871,  1.6090,  2.0814],
+        [ 1.0955,  2.4617, -0.2292,  ...,  2.0558,  0.6303,  2.8721]],
+       dtype=torch.float64)</code></pre>
+</div>
+</div>
+</section>
+<section id="speed-comparision-numpy-vs-pytorch" class="slide level2 scrollable">
+<h2>Speed Comparision Numpy vs Pytorch</h2>
+<div id="cd52f3c9" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;,&quot;height&quot;:52}}" data-execution_count="51">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb96"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb96-1"><a href="" aria-label="1"></a>cpu_start <span class="op">=</span> time.process_time()      <span class="co"># Measures CPU time (process only)</span></span>
+<span id="cb96-2"><a href="" aria-label="2"></a>wall_start <span class="op">=</span> time.perf_counter()    <span class="co"># Measures Wall time (highest resolution)</span></span>
+<span id="cb96-3"><a href="" aria-label="3"></a></span>
+<span id="cb96-4"><a href="" aria-label="4"></a></span>
+<span id="cb96-5"><a href="" aria-label="5"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">10</span>):</span>
+<span id="cb96-6"><a href="" aria-label="6"></a>    a <span class="op">=</span> np.random.randn(<span class="dv">10000</span>,<span class="dv">10000</span>)</span>
+<span id="cb96-7"><a href="" aria-label="7"></a>    b <span class="op">=</span> np.random.randn(<span class="dv">10000</span>,<span class="dv">10000</span>)</span>
+<span id="cb96-8"><a href="" aria-label="8"></a>    np.add(b, a)</span>
+<span id="cb96-9"><a href="" aria-label="9"></a></span>
+<span id="cb96-10"><a href="" aria-label="10"></a>cpu_end <span class="op">=</span> time.process_time()</span>
+<span id="cb96-11"><a href="" aria-label="11"></a>wall_end <span class="op">=</span> time.perf_counter()</span>
+<span id="cb96-12"><a href="" aria-label="12"></a></span>
+<span id="cb96-13"><a href="" aria-label="13"></a>cpu_duration <span class="op">=</span> cpu_end <span class="op">-</span> cpu_start</span>
+<span id="cb96-14"><a href="" aria-label="14"></a>wall_duration <span class="op">=</span> wall_end <span class="op">-</span> wall_start</span>
+<span id="cb96-15"><a href="" aria-label="15"></a></span>
+<span id="cb96-16"><a href="" aria-label="16"></a><span class="bu">print</span>(<span class="ss">f"CPU times: total: </span><span class="sc">{</span>cpu_duration <span class="op">*</span> <span class="dv">1000</span><span class="sc">:.0f}</span><span class="ss"> ms"</span>)</span>
+<span id="cb96-17"><a href="" aria-label="17"></a><span class="bu">print</span>(<span class="ss">f"Wall time: </span><span class="sc">{</span>wall_duration <span class="op">*</span> <span class="dv">1000</span><span class="sc">:.0f}</span><span class="ss"> ms"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>CPU times: total: 34779 ms
+Wall time: 34763 ms</code></pre>
+</div>
+</div>
+<div id="227edfd3" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;slideshow&quot;,&quot;value&quot;:{&quot;slide_type&quot;:&quot;slide&quot;}}" data-execution_count="52">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb98"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb98-1"><a href="" aria-label="1"></a>cpu_start <span class="op">=</span> time.process_time()      <span class="co"># Measures CPU time (process only)</span></span>
+<span id="cb98-2"><a href="" aria-label="2"></a>wall_start <span class="op">=</span> time.perf_counter()    <span class="co"># Measures Wall time (highest resolution)</span></span>
+<span id="cb98-3"><a href="" aria-label="3"></a></span>
+<span id="cb98-4"><a href="" aria-label="4"></a></span>
+<span id="cb98-5"><a href="" aria-label="5"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">10</span>):</span>
+<span id="cb98-6"><a href="" aria-label="6"></a>    a_cpu <span class="op">=</span> torch.randn([<span class="dv">10000</span>, <span class="dv">10000</span>])</span>
+<span id="cb98-7"><a href="" aria-label="7"></a>    b_cpu <span class="op">=</span> torch.randn([<span class="dv">10000</span>, <span class="dv">10000</span>])</span>
+<span id="cb98-8"><a href="" aria-label="8"></a>    b_cpu.add_(a_cpu)</span>
+<span id="cb98-9"><a href="" aria-label="9"></a></span>
+<span id="cb98-10"><a href="" aria-label="10"></a>cpu_end <span class="op">=</span> time.process_time()</span>
+<span id="cb98-11"><a href="" aria-label="11"></a>wall_end <span class="op">=</span> time.perf_counter()</span>
+<span id="cb98-12"><a href="" aria-label="12"></a></span>
+<span id="cb98-13"><a href="" aria-label="13"></a>cpu_duration <span class="op">=</span> cpu_end <span class="op">-</span> cpu_start</span>
+<span id="cb98-14"><a href="" aria-label="14"></a>wall_duration <span class="op">=</span> wall_end <span class="op">-</span> wall_start</span>
+<span id="cb98-15"><a href="" aria-label="15"></a></span>
+<span id="cb98-16"><a href="" aria-label="16"></a><span class="bu">print</span>(<span class="ss">f"CPU times: total: </span><span class="sc">{</span>cpu_duration <span class="op">*</span> <span class="dv">1000</span><span class="sc">:.0f}</span><span class="ss"> ms"</span>)</span>
+<span id="cb98-17"><a href="" aria-label="17"></a><span class="bu">print</span>(<span class="ss">f"Wall time: </span><span class="sc">{</span>wall_duration <span class="op">*</span> <span class="dv">1000</span><span class="sc">:.0f}</span><span class="ss"> ms"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>CPU times: total: 13167 ms
+Wall time: 11502 ms</code></pre>
+</div>
+</div>
+<div id="4eef2d9f" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;slideshow&quot;,&quot;value&quot;:{&quot;slide_type&quot;:&quot;slide&quot;}}" data-execution_count="53">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb100"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb100-1"><a href="" aria-label="1"></a>cpu_start <span class="op">=</span> time.process_time()      <span class="co"># Measures CPU time (process only)</span></span>
+<span id="cb100-2"><a href="" aria-label="2"></a>wall_start <span class="op">=</span> time.perf_counter()    <span class="co"># Measures Wall time (highest resolution)</span></span>
+<span id="cb100-3"><a href="" aria-label="3"></a></span>
+<span id="cb100-4"><a href="" aria-label="4"></a></span>
+<span id="cb100-5"><a href="" aria-label="5"></a></span>
+<span id="cb100-6"><a href="" aria-label="6"></a><span class="cf">if</span> torch.cuda.is_available():</span>
+<span id="cb100-7"><a href="" aria-label="7"></a>  <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">10</span>):</span>
+<span id="cb100-8"><a href="" aria-label="8"></a>      a <span class="op">=</span> torch.randn([<span class="dv">10000</span>, <span class="dv">10000</span>], device<span class="op">=</span>cuda0)</span>
+<span id="cb100-9"><a href="" aria-label="9"></a>      b <span class="op">=</span> torch.randn([<span class="dv">10000</span>, <span class="dv">10000</span>], device<span class="op">=</span>cuda0)</span>
+<span id="cb100-10"><a href="" aria-label="10"></a>      b.add_(a)</span>
+<span id="cb100-11"><a href="" aria-label="11"></a></span>
+<span id="cb100-12"><a href="" aria-label="12"></a>cpu_end <span class="op">=</span> time.process_time()</span>
+<span id="cb100-13"><a href="" aria-label="13"></a>wall_end <span class="op">=</span> time.perf_counter()</span>
+<span id="cb100-14"><a href="" aria-label="14"></a></span>
+<span id="cb100-15"><a href="" aria-label="15"></a>cpu_duration <span class="op">=</span> cpu_end <span class="op">-</span> cpu_start</span>
+<span id="cb100-16"><a href="" aria-label="16"></a>wall_duration <span class="op">=</span> wall_end <span class="op">-</span> wall_start</span>
+<span id="cb100-17"><a href="" aria-label="17"></a></span>
+<span id="cb100-18"><a href="" aria-label="18"></a><span class="bu">print</span>(<span class="ss">f"CPU times: total: </span><span class="sc">{</span>cpu_duration <span class="op">*</span> <span class="dv">1000</span><span class="sc">:.0f}</span><span class="ss"> ms"</span>)</span>
+<span id="cb100-19"><a href="" aria-label="19"></a><span class="bu">print</span>(<span class="ss">f"Wall time: </span><span class="sc">{</span>wall_duration <span class="op">*</span> <span class="dv">1000</span><span class="sc">:.0f}</span><span class="ss"> ms"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>CPU times: total: 26 ms
+Wall time: 15 ms</code></pre>
+</div>
+</div>
+<div id="24171bdf" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;slideshow&quot;,&quot;value&quot;:{&quot;slide_type&quot;:&quot;slide&quot;}}" data-execution_count="54">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb102"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb102-1"><a href="" aria-label="1"></a>cpu_start <span class="op">=</span> time.process_time()      <span class="co"># Measures CPU time (process only)</span></span>
+<span id="cb102-2"><a href="" aria-label="2"></a>wall_start <span class="op">=</span> time.perf_counter()    <span class="co"># Measures Wall time (highest resolution)</span></span>
+<span id="cb102-3"><a href="" aria-label="3"></a></span>
+<span id="cb102-4"><a href="" aria-label="4"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">10</span>):</span>
+<span id="cb102-5"><a href="" aria-label="5"></a>    a <span class="op">=</span> np.random.randn(<span class="dv">10000</span>,<span class="dv">10000</span>)</span>
+<span id="cb102-6"><a href="" aria-label="6"></a>    b <span class="op">=</span> np.random.randn(<span class="dv">10000</span>,<span class="dv">10000</span>)</span>
+<span id="cb102-7"><a href="" aria-label="7"></a>    np.matmul(b, a)</span>
+<span id="cb102-8"><a href="" aria-label="8"></a></span>
+<span id="cb102-9"><a href="" aria-label="9"></a>cpu_end <span class="op">=</span> time.process_time()</span>
+<span id="cb102-10"><a href="" aria-label="10"></a>wall_end <span class="op">=</span> time.perf_counter()</span>
+<span id="cb102-11"><a href="" aria-label="11"></a></span>
+<span id="cb102-12"><a href="" aria-label="12"></a>cpu_duration <span class="op">=</span> cpu_end <span class="op">-</span> cpu_start</span>
+<span id="cb102-13"><a href="" aria-label="13"></a>wall_duration <span class="op">=</span> wall_end <span class="op">-</span> wall_start</span>
+<span id="cb102-14"><a href="" aria-label="14"></a></span>
+<span id="cb102-15"><a href="" aria-label="15"></a><span class="bu">print</span>(<span class="ss">f"CPU times: total: </span><span class="sc">{</span>cpu_duration <span class="op">*</span> <span class="dv">1000</span><span class="sc">:.0f}</span><span class="ss"> ms"</span>)</span>
+<span id="cb102-16"><a href="" aria-label="16"></a><span class="bu">print</span>(<span class="ss">f"Wall time: </span><span class="sc">{</span>wall_duration <span class="op">*</span> <span class="dv">1000</span><span class="sc">:.0f}</span><span class="ss"> ms"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>CPU times: total: 985494 ms
+Wall time: 152856 ms</code></pre>
+</div>
+</div>
+<div id="db306c13" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;ExecuteTime&quot;,&quot;value&quot;:{&quot;end_time&quot;:&quot;2022-03-10T06:01:27.332038Z&quot;,&quot;start_time&quot;:&quot;2022-03-10T06:01:27.325889Z&quot;}}" data-execution_count="55">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb104"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb104-1"><a href="" aria-label="1"></a><span class="kw">del</span> a</span>
+<span id="cb104-2"><a href="" aria-label="2"></a><span class="kw">del</span> b</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="3b4e65eb" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;slideshow&quot;,&quot;value&quot;:{&quot;slide_type&quot;:&quot;slide&quot;}}" data-execution_count="56">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb105"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb105-1"><a href="" aria-label="1"></a>cpu_start <span class="op">=</span> time.process_time()      <span class="co"># Measures CPU time (process only)</span></span>
+<span id="cb105-2"><a href="" aria-label="2"></a>wall_start <span class="op">=</span> time.perf_counter()    <span class="co"># Measures Wall time (highest resolution)</span></span>
+<span id="cb105-3"><a href="" aria-label="3"></a></span>
+<span id="cb105-4"><a href="" aria-label="4"></a></span>
+<span id="cb105-5"><a href="" aria-label="5"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">10</span>):</span>
+<span id="cb105-6"><a href="" aria-label="6"></a>    a_cpu <span class="op">=</span> torch.randn([<span class="dv">10000</span>, <span class="dv">10000</span>])</span>
+<span id="cb105-7"><a href="" aria-label="7"></a>    b_cpu <span class="op">=</span> torch.randn([<span class="dv">10000</span>, <span class="dv">10000</span>])</span>
+<span id="cb105-8"><a href="" aria-label="8"></a>    torch.matmul(a_cpu, b_cpu)</span>
+<span id="cb105-9"><a href="" aria-label="9"></a></span>
+<span id="cb105-10"><a href="" aria-label="10"></a>cpu_end <span class="op">=</span> time.process_time()</span>
+<span id="cb105-11"><a href="" aria-label="11"></a>wall_end <span class="op">=</span> time.perf_counter()</span>
+<span id="cb105-12"><a href="" aria-label="12"></a></span>
+<span id="cb105-13"><a href="" aria-label="13"></a>cpu_duration <span class="op">=</span> cpu_end <span class="op">-</span> cpu_start</span>
+<span id="cb105-14"><a href="" aria-label="14"></a>wall_duration <span class="op">=</span> wall_end <span class="op">-</span> wall_start</span>
+<span id="cb105-15"><a href="" aria-label="15"></a></span>
+<span id="cb105-16"><a href="" aria-label="16"></a><span class="bu">print</span>(<span class="ss">f"CPU times: total: </span><span class="sc">{</span>cpu_duration <span class="op">*</span> <span class="dv">1000</span><span class="sc">:.0f}</span><span class="ss"> ms"</span>)</span>
+<span id="cb105-17"><a href="" aria-label="17"></a><span class="bu">print</span>(<span class="ss">f"Wall time: </span><span class="sc">{</span>wall_duration <span class="op">*</span> <span class="dv">1000</span><span class="sc">:.0f}</span><span class="ss"> ms"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>CPU times: total: 164268 ms
+Wall time: 49373 ms</code></pre>
+</div>
+</div>
+<div id="ca63ecb5" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;slideshow&quot;,&quot;value&quot;:{&quot;slide_type&quot;:&quot;slide&quot;}}" data-execution_count="57">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb107"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb107-1"><a href="" aria-label="1"></a>cpu_start <span class="op">=</span> time.process_time()      <span class="co"># Measures CPU time (process only)</span></span>
+<span id="cb107-2"><a href="" aria-label="2"></a>wall_start <span class="op">=</span> time.perf_counter()    <span class="co"># Measures Wall time (highest resolution)</span></span>
+<span id="cb107-3"><a href="" aria-label="3"></a></span>
+<span id="cb107-4"><a href="" aria-label="4"></a><span class="cf">if</span> torch.cuda.is_available():</span>
+<span id="cb107-5"><a href="" aria-label="5"></a>  <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">10</span>):</span>
+<span id="cb107-6"><a href="" aria-label="6"></a>      a <span class="op">=</span> torch.randn([<span class="dv">10000</span>, <span class="dv">10000</span>], device<span class="op">=</span>cuda0)</span>
+<span id="cb107-7"><a href="" aria-label="7"></a>      b <span class="op">=</span> torch.randn([<span class="dv">10000</span>, <span class="dv">10000</span>], device<span class="op">=</span>cuda0)</span>
+<span id="cb107-8"><a href="" aria-label="8"></a>      torch.matmul(a, b)</span>
+<span id="cb107-9"><a href="" aria-label="9"></a>cpu_end <span class="op">=</span> time.process_time()</span>
+<span id="cb107-10"><a href="" aria-label="10"></a>wall_end <span class="op">=</span> time.perf_counter()</span>
+<span id="cb107-11"><a href="" aria-label="11"></a></span>
+<span id="cb107-12"><a href="" aria-label="12"></a>cpu_duration <span class="op">=</span> cpu_end <span class="op">-</span> cpu_start</span>
+<span id="cb107-13"><a href="" aria-label="13"></a>wall_duration <span class="op">=</span> wall_end <span class="op">-</span> wall_start</span>
+<span id="cb107-14"><a href="" aria-label="14"></a></span>
+<span id="cb107-15"><a href="" aria-label="15"></a><span class="bu">print</span>(<span class="ss">f"CPU times: total: </span><span class="sc">{</span>cpu_duration <span class="op">*</span> <span class="dv">1000</span><span class="sc">:.0f}</span><span class="ss"> ms"</span>)</span>
+<span id="cb107-16"><a href="" aria-label="16"></a><span class="bu">print</span>(<span class="ss">f"Wall time: </span><span class="sc">{</span>wall_duration <span class="op">*</span> <span class="dv">1000</span><span class="sc">:.0f}</span><span class="ss"> ms"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>CPU times: total: 20 ms
+Wall time: 21 ms</code></pre>
+</div>
+</div>
+</section>
+<section id="automatic-differentiation" class="slide level2 scrollable">
+<h2>Automatic differentiation</h2>
+<ul>
+<li>From: https://pytorch.org/tutorials/beginner/blitz/autograd_tutorial.html</li>
+<li>Now that you have learned how to use PyTorch Tensors you will learn how we can use PyTorch for automatic differentiation.</li>
+<li>The <code>autograd</code> package in PyTorch provides automatic differentiation for all operations on Tensors.
+<ul>
+<li>It is a define-by-run framework, which means that your backprop is defined by how your code is run, and that every single iteration can be different.</li>
+</ul></li>
+<li>To allow PyTorch to keep track of operations for automatic differentiation, we need to set <code>requires_grad</code> as <code>True</code> for a Tensor.
+<ul>
+<li>Autograd will then start to track all operations on the Tensor.</li>
+<li>When you finish your computation you can call <code>.backward()</code> and have all the gradients computed automatically.</li>
+<li>The gradient for this tensor will be accumulated into the <code>.grad</code> attribute.</li>
+</ul></li>
+<li>To stop a tensor from tracking history, you can call <code>.detach()</code> to detach it from the computation history, and to prevent future computation from being tracked.</li>
+<li>To prevent tracking history (and using memory), you can also wrap the code block in <code>with torch.no_grad():</code>. This can be particularly helpful when evaluating a model because the model may have trainable parameters with <code>requires_grad=True</code>, but for which we don’t need the gradients.</li>
+<li>There’s one more class which is very important for autograd implementation - a <code>Function</code>.
+<ul>
+<li><code>Tensor</code> and <code>Function</code> are interconnected and build up an acyclic graph that encodes a complete history of computation. Each tensor has a <code>.grad_fn</code> attribute that references a <code>Function</code> that has created the <code>Tensor</code> (except for Tensors created by the user - their <code>grad_fn</code> is <code>None</code>).</li>
+</ul></li>
+<li>If you want to compute the derivatives, you can call <code>.backward()</code> on a <code>Tensor</code>.
+<ul>
+<li>If <code>Tensor</code> is a scalar (i.e.&nbsp;it holds a one element data), you don’t need to specify any arguments to <code>backward()</code>,</li>
+<li>However if it has more elements, you need to specify a <code>gradient</code> argument that is a tensor of matching shape.</li>
+</ul></li>
+</ul>
+</section>
+<section id="automatic-differentiation-example" class="slide level2 scrollable">
+<h2>Automatic differentiation Example</h2>
+<ul>
+<li>Now, let us create a tensor and set <code>requires_grad=True</code> to track computation with it:</li>
+</ul>
+<div id="c4ad24fb" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;,&quot;height&quot;:70}}" data-execution_count="58">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb109"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb109-1"><a href="" aria-label="1"></a>x <span class="op">=</span> torch.ones([<span class="dv">3</span>,<span class="dv">2</span>], requires_grad <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb109-2"><a href="" aria-label="2"></a><span class="bu">print</span>(x)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>tensor([[1., 1.],
+        [1., 1.],
+        [1., 1.]], requires_grad=True)</code></pre>
+</div>
+</div>
+<div id="e95f7cd7" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;slideshow&quot;,&quot;value&quot;:{&quot;slide_type&quot;:&quot;slide&quot;}}" data-execution_count="59">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb111"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb111-1"><a href="" aria-label="1"></a>y <span class="op">=</span> x <span class="op">+</span> <span class="dv">5</span></span>
+<span id="cb111-2"><a href="" aria-label="2"></a><span class="bu">print</span>(y)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>tensor([[6., 6.],
+        [6., 6.],
+        [6., 6.]], grad_fn=&lt;AddBackward0&gt;)</code></pre>
+</div>
+</div>
+<ul>
+<li>You may have noticed that <code>y</code> was created as a result of an operation, so it has a <code>grad_fn</code>:</li>
+</ul>
+<div id="25b7738b" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;ExecuteTime&quot;,&quot;value&quot;:{&quot;end_time&quot;:&quot;2022-03-10T06:09:13.088594Z&quot;,&quot;start_time&quot;:&quot;2022-03-10T06:09:13.086119Z&quot;}}" data-execution_count="60">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb113"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb113-1"><a href="" aria-label="1"></a><span class="bu">print</span>(y.grad_fn)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;AddBackward0 object at 0x7d522e036800&gt;</code></pre>
+</div>
+</div>
+<ul>
+<li>Let’s do more operations on <code>y</code>:</li>
+</ul>
+<div id="9c555c94" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;,&quot;height&quot;:70}}" data-execution_count="61">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb115"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb115-1"><a href="" aria-label="1"></a>z <span class="op">=</span> y<span class="op">*</span>y <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb115-2"><a href="" aria-label="2"></a><span class="bu">print</span>(z)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>tensor([[37., 37.],
+        [37., 37.],
+        [37., 37.]], grad_fn=&lt;AddBackward0&gt;)</code></pre>
+</div>
+</div>
+<div id="a5510e17" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;slideshow&quot;,&quot;value&quot;:{&quot;slide_type&quot;:&quot;slide&quot;}}" data-execution_count="62">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb117"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb117-1"><a href="" aria-label="1"></a>t <span class="op">=</span> torch.<span class="bu">sum</span>(z)</span>
+<span id="cb117-2"><a href="" aria-label="2"></a><span class="bu">print</span>(t)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>tensor(222., grad_fn=&lt;SumBackward0&gt;)</code></pre>
+</div>
+</div>
+<div id="9c01d175" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;slideshow&quot;,&quot;value&quot;:{&quot;slide_type&quot;:&quot;slide&quot;}}" data-execution_count="63">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb119"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb119-1"><a href="" aria-label="1"></a><span class="co">#Now compute all gradients</span></span>
+<span id="cb119-2"><a href="" aria-label="2"></a>t.backward()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="0a33451f" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;slideshow&quot;,&quot;value&quot;:{&quot;slide_type&quot;:&quot;-&quot;}}" data-execution_count="64">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb120"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb120-1"><a href="" aria-label="1"></a><span class="bu">print</span>(x.grad)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>tensor([[12., 12.],
+        [12., 12.],
+        [12., 12.]])</code></pre>
+</div>
+</div>
+</section>
+<section id="lets-verify-if-the-gradient-fracpartial-tpartial-x-is-correct" class="slide level2 scrollable">
+<h2>Let’s verify if the gradient, <span class="math inline">\(\frac{\partial t}{\partial x}\)</span> is correct</h2>
+<ul>
+<li><p>Given, <span class="math inline">\(x = \begin{pmatrix}x_{00} &amp; x_{01}\\
+x_{10}&amp; x_{11}\\
+x_{20} &amp; x_{21}\end{pmatrix} \in \mathbb{R}^{3\times 2}\)</span></p></li>
+<li><p><span class="math inline">\(t = \sum_i z_i\)</span></p></li>
+<li><p><span class="math inline">\(z_i = y_i^2 + 1\)</span></p></li>
+<li><p><span class="math inline">\(y_i = x_i + 5\)</span></p></li>
+</ul>
+<p>Now, gradient of <code>t</code> with respect to <code>x</code> is –</p>
+<p><span class="math display">\[
+\nabla_x t = \nabla_z t \nabla_y z \nabla_x y
+\]</span> where, <span class="math display">\[
+\nabla_x t = \begin{pmatrix}
+\frac{\partial t}{\partial x_{00}} &amp; \frac{\partial t}{\partial x_{01}}\\
+\frac{\partial t}{\partial x_{10}} &amp; \frac{\partial t}{\partial x_{11}}\\
+\frac{\partial t}{\partial x_{20}} &amp; \frac{\partial t}{\partial x_{21}}\\
+\end{pmatrix}
+\]</span> and, <span class="math inline">\(y\in \mathbb{R}^{3\times 2}, x \in \mathbb{R}^{3\times 2}\)</span> <span class="math display">\[
+\nabla_x y = \begin{pmatrix}
+\frac{\partial y_{00}}{\partial x_{00}} &amp; \frac{\partial y_{01}}{\partial x_{01}}\\
+\frac{\partial y_{10}}{\partial x_{10}} &amp; \frac{\partial y_{11}}{\partial x_{11}}\\
+\frac{\partial y_{20}}{\partial x_{20}} &amp; \frac{\partial y_{21}}{\partial x_{21}}\\
+\end{pmatrix}= \begin{pmatrix}
+1 &amp; 1\\
+1 &amp; 1\\
+1 &amp; 1
+\end{pmatrix}
+\]</span></p>
+<p>and, <span class="math inline">\(z\in \mathbb{R}^{3\times 2}, y \in \mathbb{R}^{3\times 2}\)</span></p>
+<p><span class="math display">\[
+\nabla_y z = \begin{pmatrix}
+\frac{\partial z_{00}}{\partial y_{00}} &amp; \frac{\partial z_{01}}{\partial y_{01}}\\
+\frac{\partial z_{10}}{\partial y_{10}} &amp; \frac{\partial z_{11}}{\partial y_{11}}\\
+\frac{\partial z_{20}}{\partial y_{20}} &amp; \frac{\partial z_{21}}{\partial y_{21}}\\
+\end{pmatrix} =  \begin{pmatrix}2y_{00} &amp; 2y_{01}\\
+2y_{10} &amp; 2y_{11}\\
+2y_{20} &amp; 2y_{21}\\
+\end{pmatrix}
+\]</span></p>
+<p>and, <span class="math display">\[
+\nabla_z t = \begin{pmatrix}
+\frac{\partial t}{\partial z_{00}} &amp; \frac{\partial t}{\partial z_{01}}\\
+\frac{\partial t}{\partial z_{10}} &amp; \frac{\partial t}{\partial z_{11}}\\
+\frac{\partial t}{\partial z_{20}} &amp; \frac{\partial t}{\partial z_{21}}\\
+\end{pmatrix} = \begin{pmatrix}1 &amp; 1\\
+1 &amp; 1\\
+1 &amp; 1
+\end{pmatrix}
+\]</span></p>
+<p><span class="math display">\[
+\begin{eqnarray}
+\nonumber \nabla_x t &amp;=&amp; \nabla_z t \nabla_y z \nabla_x y\\
+&amp;=&amp; \begin{pmatrix}1 &amp; 1\\
+1 &amp; 1\\
+1 &amp; 1
+\end{pmatrix}\begin{pmatrix}2y_{00} &amp; 2y_{01}\\
+2y_{10} &amp; 2y_{11}\\
+2y_{20} &amp; 2y_{21}\\
+\end{pmatrix}\begin{pmatrix}
+1 &amp; 1\\
+1 &amp; 1\\
+1 &amp; 1
+\end{pmatrix}\\
+&amp;=&amp; \begin{pmatrix}2y_{00} &amp; 2y_{01}\\
+2y_{10} &amp; 2y_{11}\\
+2y_{20} &amp; 2y_{21}\\
+\end{pmatrix}\quad \text{element wise multiplication}
+\end{eqnarray}
+\]</span></p>
+<ul>
+<li>At x = 1, y = 6, <span class="math inline">\(\frac{\partial t}{\partial x_i} = 12\)</span>
+<ul>
+<li>That is, at <span class="math inline">\(x = \begin{pmatrix}1 &amp; 1\\ 1 &amp; 1\\1 &amp; 1\end{pmatrix}\)</span>
+<ul>
+<li><span class="math inline">\(y = \begin{pmatrix}6 &amp; 6\\ 6 &amp; 6\\6 &amp; 6\end{pmatrix}\)</span></li>
+<li>Therefore, <span class="math inline">\(\nabla_x t = \begin{pmatrix}12 &amp; 12\\
+12 &amp; 12\\
+12 &amp; 12\\
+\end{pmatrix}\)</span></li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="second-example---auto-diff" class="slide level2 scrollable">
+<h2>Second Example - Auto Diff</h2>
+<div id="e3cce235" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;,&quot;height&quot;:122}}" data-execution_count="65">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb122"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb122-1"><a href="" aria-label="1"></a><span class="co">#second example</span></span>
+<span id="cb122-2"><a href="" aria-label="2"></a>x <span class="op">=</span> torch.ones([<span class="dv">3</span>, <span class="dv">2</span>], requires_grad<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb122-3"><a href="" aria-label="3"></a>y <span class="op">=</span> x <span class="op">+</span> <span class="dv">5</span></span>
+<span id="cb122-4"><a href="" aria-label="4"></a>r <span class="op">=</span> <span class="dv">1</span><span class="op">/</span>(<span class="dv">1</span> <span class="op">+</span> torch.exp(<span class="op">-</span>y))</span>
+<span id="cb122-5"><a href="" aria-label="5"></a><span class="bu">print</span>(r)</span>
+<span id="cb122-6"><a href="" aria-label="6"></a>s <span class="op">=</span> torch.<span class="bu">sum</span>(r)</span>
+<span id="cb122-7"><a href="" aria-label="7"></a>s.backward()</span>
+<span id="cb122-8"><a href="" aria-label="8"></a><span class="bu">print</span>(x.grad)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>tensor([[0.9975, 0.9975],
+        [0.9975, 0.9975],
+        [0.9975, 0.9975]], grad_fn=&lt;MulBackward0&gt;)
+tensor([[0.0025, 0.0025],
+        [0.0025, 0.0025],
+        [0.0025, 0.0025]])</code></pre>
+</div>
+</div>
+<p><span class="math inline">\(\frac{\partial{s}}{\partial{x}} = \frac{\partial{s}}{\partial{r}} \cdot \frac{\partial{r}}{\partial{x}}\)</span></p>
+<p>For the above code <span class="math inline">\(a\)</span> represents <span class="math inline">\(\frac{\partial{s}}{\partial{r}}\)</span> and then <span class="math inline">\(x.grad\)</span> gives directly <span class="math inline">\(\frac{\partial{s}}{\partial{x}}\)</span></p>
+</section>
+<section id="autodiff-example-regression" class="slide level2 scrollable">
+<h2>Autodiff example (regression)</h2>
+<div id="84407eff" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{}}" data-execution_count="66">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb124"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb124-1"><a href="" aria-label="1"></a>x <span class="op">=</span> torch.randn([<span class="dv">20</span>, <span class="dv">1</span>], requires_grad<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb124-2"><a href="" aria-label="2"></a>y <span class="op">=</span> <span class="dv">3</span><span class="op">*</span>x <span class="op">-</span> <span class="dv">2</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="62e01be6" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;slideshow&quot;,&quot;value&quot;:{&quot;slide_type&quot;:&quot;slide&quot;}}" data-execution_count="67">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb125"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb125-1"><a href="" aria-label="1"></a>w <span class="op">=</span> torch.tensor([<span class="fl">1.</span>], requires_grad <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb125-2"><a href="" aria-label="2"></a>b <span class="op">=</span> torch.tensor([<span class="fl">1.</span>], requires_grad <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb125-3"><a href="" aria-label="3"></a>y_hat <span class="op">=</span> w <span class="op">*</span> x <span class="op">+</span> b</span>
+<span id="cb125-4"><a href="" aria-label="4"></a>loss <span class="op">=</span> torch.<span class="bu">sum</span>((y_hat <span class="op">-</span> y)<span class="op">**</span><span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="3a29fbf2" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;slideshow&quot;,&quot;value&quot;:{&quot;slide_type&quot;:&quot;slide&quot;}}" data-execution_count="68">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb126"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb126-1"><a href="" aria-label="1"></a><span class="bu">print</span>(loss)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>tensor(203.8604, grad_fn=&lt;SumBackward0&gt;)</code></pre>
+</div>
+</div>
+<div id="aa084f2f" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;ExecuteTime&quot;,&quot;value&quot;:{&quot;end_time&quot;:&quot;2022-03-10T07:25:50.556826Z&quot;,&quot;start_time&quot;:&quot;2022-03-10T07:25:50.554058Z&quot;}}" data-execution_count="69">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb128"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb128-1"><a href="" aria-label="1"></a><span class="bu">print</span>(loss.item())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>203.86044311523438</code></pre>
+</div>
+</div>
+<div id="e91ca44c" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;slideshow&quot;,&quot;value&quot;:{&quot;slide_type&quot;:&quot;slide&quot;}}" data-execution_count="70">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb130"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb130-1"><a href="" aria-label="1"></a>loss.backward() <span class="co">#compute gradients</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="7f557fed" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;slideshow&quot;,&quot;value&quot;:{&quot;slide_type&quot;:&quot;slide&quot;}}" data-execution_count="71">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb131"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb131-1"><a href="" aria-label="1"></a><span class="bu">print</span>(w.grad, b.grad)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>tensor([-43.8780]) tensor([106.6549])</code></pre>
+</div>
+</div>
+</section>
+<section id="now-lets-do-it-in-a-loop" class="slide level2 scrollable">
+<h2>Now, let’s do it in a loop</h2>
+<div id="1932554a" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;slideshow&quot;,&quot;value&quot;:{&quot;slide_type&quot;:&quot;slide&quot;}}" data-execution_count="72">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb133"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb133-1"><a href="" aria-label="1"></a><span class="im">import</span> torch</span>
+<span id="cb133-2"><a href="" aria-label="2"></a></span>
+<span id="cb133-3"><a href="" aria-label="3"></a>learning_rate <span class="op">=</span> <span class="fl">0.01</span></span>
+<span id="cb133-4"><a href="" aria-label="4"></a></span>
+<span id="cb133-5"><a href="" aria-label="5"></a>w <span class="op">=</span> torch.tensor([<span class="fl">1.</span>], requires_grad<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb133-6"><a href="" aria-label="6"></a>b <span class="op">=</span> torch.tensor([<span class="fl">1.</span>], requires_grad<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb133-7"><a href="" aria-label="7"></a></span>
+<span id="cb133-8"><a href="" aria-label="8"></a><span class="bu">print</span>(<span class="ss">f'Initially,</span><span class="ch">\n</span><span class="ss">w = </span><span class="sc">{</span>w<span class="sc">.</span>item()<span class="sc">}</span><span class="ss">, b = </span><span class="sc">{</span>b<span class="sc">.</span>item()<span class="sc">}</span><span class="ss">'</span>)</span>
+<span id="cb133-9"><a href="" aria-label="9"></a></span>
+<span id="cb133-10"><a href="" aria-label="10"></a><span class="co">#dataset </span></span>
+<span id="cb133-11"><a href="" aria-label="11"></a>x <span class="op">=</span> torch.randn([<span class="dv">20</span>, <span class="dv">1</span>])</span>
+<span id="cb133-12"><a href="" aria-label="12"></a>y <span class="op">=</span> <span class="dv">3</span><span class="op">*</span>x <span class="op">-</span> <span class="dv">2</span> <span class="co">#ground truth</span></span>
+<span id="cb133-13"><a href="" aria-label="13"></a></span>
+<span id="cb133-14"><a href="" aria-label="14"></a></span>
+<span id="cb133-15"><a href="" aria-label="15"></a></span>
+<span id="cb133-16"><a href="" aria-label="16"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">10</span>):</span>
+<span id="cb133-17"><a href="" aria-label="17"></a>    y_hat <span class="op">=</span> w<span class="op">*</span>x <span class="op">+</span> b <span class="co">#predict</span></span>
+<span id="cb133-18"><a href="" aria-label="18"></a></span>
+<span id="cb133-19"><a href="" aria-label="19"></a>    loss <span class="op">=</span> torch.<span class="bu">sum</span>((y_hat <span class="op">-</span> y)<span class="op">**</span><span class="dv">2</span>) <span class="co">#compute loss</span></span>
+<span id="cb133-20"><a href="" aria-label="20"></a>  </span>
+<span id="cb133-21"><a href="" aria-label="21"></a>    loss.backward() <span class="co">#calculate gradient</span></span>
+<span id="cb133-22"><a href="" aria-label="22"></a>  </span>
+<span id="cb133-23"><a href="" aria-label="23"></a>    <span class="cf">with</span> torch.no_grad(): <span class="co">#omit gradient tracking history</span></span>
+<span id="cb133-24"><a href="" aria-label="24"></a>        w <span class="op">-=</span> learning_rate <span class="op">*</span> w.grad</span>
+<span id="cb133-25"><a href="" aria-label="25"></a>        b <span class="op">-=</span> learning_rate <span class="op">*</span> b.grad</span>
+<span id="cb133-26"><a href="" aria-label="26"></a>    </span>
+<span id="cb133-27"><a href="" aria-label="27"></a>    w.grad.zero_()</span>
+<span id="cb133-28"><a href="" aria-label="28"></a>    b.grad.zero_()</span>
+<span id="cb133-29"><a href="" aria-label="29"></a></span>
+<span id="cb133-30"><a href="" aria-label="30"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Final:"</span>)</span>
+<span id="cb133-31"><a href="" aria-label="31"></a><span class="bu">print</span>(<span class="st">"w ="</span>, w.item())</span>
+<span id="cb133-32"><a href="" aria-label="32"></a><span class="bu">print</span>(<span class="st">"b ="</span>, b.item())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Initially,
+w = 1.0, b = 1.0
+
+Final:
+w = 2.96683931350708
+b = -1.9537687301635742</code></pre>
+</div>
+</div>
+</section>
+<section id="and-we-are-now-ready-to-push-it-to-a-gpu" class="slide level2 scrollable">
+<h2>And, we are now ready to push it to a GPU</h2>
+<div id="9375b42f" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;slideshow&quot;,&quot;value&quot;:{&quot;slide_type&quot;:&quot;slide&quot;}}" data-execution_count="73">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb135"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb135-1"><a href="" aria-label="1"></a><span class="im">import</span> torch</span>
+<span id="cb135-2"><a href="" aria-label="2"></a></span>
+<span id="cb135-3"><a href="" aria-label="3"></a><span class="co"># Device</span></span>
+<span id="cb135-4"><a href="" aria-label="4"></a>device <span class="op">=</span> torch.device(<span class="st">"cuda:0"</span> <span class="cf">if</span> torch.cuda.is_available() <span class="cf">else</span> <span class="st">"cpu"</span>)</span>
+<span id="cb135-5"><a href="" aria-label="5"></a></span>
+<span id="cb135-6"><a href="" aria-label="6"></a><span class="co"># Reproducibility</span></span>
+<span id="cb135-7"><a href="" aria-label="7"></a>torch.manual_seed(<span class="dv">42</span>)</span>
+<span id="cb135-8"><a href="" aria-label="8"></a></span>
+<span id="cb135-9"><a href="" aria-label="9"></a>learning_rate <span class="op">=</span> <span class="fl">0.01</span></span>
+<span id="cb135-10"><a href="" aria-label="10"></a>N <span class="op">=</span> <span class="dv">100</span></span>
+<span id="cb135-11"><a href="" aria-label="11"></a>epochs <span class="op">=</span> <span class="dv">200</span></span>
+<span id="cb135-12"><a href="" aria-label="12"></a></span>
+<span id="cb135-13"><a href="" aria-label="13"></a><span class="co"># --------------------------------------------------</span></span>
+<span id="cb135-14"><a href="" aria-label="14"></a><span class="co"># Learnable parameters</span></span>
+<span id="cb135-15"><a href="" aria-label="15"></a><span class="co"># --------------------------------------------------</span></span>
+<span id="cb135-16"><a href="" aria-label="16"></a>w <span class="op">=</span> torch.rand((), requires_grad<span class="op">=</span><span class="va">True</span>, device<span class="op">=</span>device)</span>
+<span id="cb135-17"><a href="" aria-label="17"></a>b <span class="op">=</span> torch.ones((), requires_grad<span class="op">=</span><span class="va">True</span>, device<span class="op">=</span>device)</span>
+<span id="cb135-18"><a href="" aria-label="18"></a></span>
+<span id="cb135-19"><a href="" aria-label="19"></a><span class="co"># --------------------------------------------------</span></span>
+<span id="cb135-20"><a href="" aria-label="20"></a><span class="co"># Dataset: y = 3x - 2</span></span>
+<span id="cb135-21"><a href="" aria-label="21"></a><span class="co"># --------------------------------------------------</span></span>
+<span id="cb135-22"><a href="" aria-label="22"></a>x <span class="op">=</span> torch.randn(N, device<span class="op">=</span>device)</span>
+<span id="cb135-23"><a href="" aria-label="23"></a>y <span class="op">=</span> <span class="dv">3</span> <span class="op">*</span> x <span class="op">-</span> <span class="dv">2</span></span>
+<span id="cb135-24"><a href="" aria-label="24"></a></span>
+<span id="cb135-25"><a href="" aria-label="25"></a><span class="co"># --------------------------------------------------</span></span>
+<span id="cb135-26"><a href="" aria-label="26"></a><span class="co"># Training</span></span>
+<span id="cb135-27"><a href="" aria-label="27"></a><span class="co"># --------------------------------------------------</span></span>
+<span id="cb135-28"><a href="" aria-label="28"></a><span class="cf">for</span> epoch <span class="kw">in</span> <span class="bu">range</span>(epochs):</span>
+<span id="cb135-29"><a href="" aria-label="29"></a></span>
+<span id="cb135-30"><a href="" aria-label="30"></a>    <span class="co"># Forward pass</span></span>
+<span id="cb135-31"><a href="" aria-label="31"></a>    y_hat <span class="op">=</span> w <span class="op">*</span> x <span class="op">+</span> b</span>
+<span id="cb135-32"><a href="" aria-label="32"></a></span>
+<span id="cb135-33"><a href="" aria-label="33"></a>    <span class="co"># Mean Squared Error</span></span>
+<span id="cb135-34"><a href="" aria-label="34"></a>    loss <span class="op">=</span> torch.mean((y_hat <span class="op">-</span> y) <span class="op">**</span> <span class="dv">2</span>)</span>
+<span id="cb135-35"><a href="" aria-label="35"></a></span>
+<span id="cb135-36"><a href="" aria-label="36"></a>    <span class="co"># Compute gradients</span></span>
+<span id="cb135-37"><a href="" aria-label="37"></a>    loss.backward()</span>
+<span id="cb135-38"><a href="" aria-label="38"></a></span>
+<span id="cb135-39"><a href="" aria-label="39"></a>    <span class="co"># Gradient descent update</span></span>
+<span id="cb135-40"><a href="" aria-label="40"></a>    <span class="cf">with</span> torch.no_grad():</span>
+<span id="cb135-41"><a href="" aria-label="41"></a>        w <span class="op">-=</span> learning_rate <span class="op">*</span> w.grad</span>
+<span id="cb135-42"><a href="" aria-label="42"></a>        b <span class="op">-=</span> learning_rate <span class="op">*</span> b.grad</span>
+<span id="cb135-43"><a href="" aria-label="43"></a></span>
+<span id="cb135-44"><a href="" aria-label="44"></a>    <span class="co"># IMPORTANT: clear accumulated gradients</span></span>
+<span id="cb135-45"><a href="" aria-label="45"></a>    w.grad.zero_()</span>
+<span id="cb135-46"><a href="" aria-label="46"></a>    b.grad.zero_()</span>
+<span id="cb135-47"><a href="" aria-label="47"></a></span>
+<span id="cb135-48"><a href="" aria-label="48"></a>    <span class="cf">if</span> epoch <span class="op">%</span> <span class="dv">20</span> <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb135-49"><a href="" aria-label="49"></a>        <span class="bu">print</span>(</span>
+<span id="cb135-50"><a href="" aria-label="50"></a>            <span class="ss">f"Epoch </span><span class="sc">{</span>epoch<span class="sc">:3d}</span><span class="ss">: "</span></span>
+<span id="cb135-51"><a href="" aria-label="51"></a>            <span class="ss">f"loss=</span><span class="sc">{</span>loss<span class="sc">.</span>item()<span class="sc">:.4f}</span><span class="ss">, "</span></span>
+<span id="cb135-52"><a href="" aria-label="52"></a>            <span class="ss">f"w=</span><span class="sc">{</span>w<span class="sc">.</span>item()<span class="sc">:.4f}</span><span class="ss">, "</span></span>
+<span id="cb135-53"><a href="" aria-label="53"></a>            <span class="ss">f"b=</span><span class="sc">{</span>b<span class="sc">.</span>item()<span class="sc">:.4f}</span><span class="ss">"</span></span>
+<span id="cb135-54"><a href="" aria-label="54"></a>        )</span>
+<span id="cb135-55"><a href="" aria-label="55"></a></span>
+<span id="cb135-56"><a href="" aria-label="56"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Final:"</span>)</span>
+<span id="cb135-57"><a href="" aria-label="57"></a><span class="bu">print</span>(<span class="st">"w ="</span>, w.item())</span>
+<span id="cb135-58"><a href="" aria-label="58"></a><span class="bu">print</span>(<span class="st">"b ="</span>, b.item())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Epoch   0: loss=14.4922, w=0.6533, b=0.9355
+Epoch  20: loss=6.4871, w=1.3277, b=-0.1023
+Epoch  40: loss=2.9259, w=1.8030, b=-0.7774
+Epoch  60: loss=1.3319, w=2.1396, b=-1.2156
+Epoch  80: loss=0.6130, w=2.3789, b=-1.4992
+Epoch 100: loss=0.2858, w=2.5499, b=-1.6822
+Epoch 120: loss=0.1352, w=2.6726, b=-1.7999
+Epoch 140: loss=0.0650, w=2.7610, b=-1.8752
+Epoch 160: loss=0.0318, w=2.8250, b=-1.9231
+Epoch 180: loss=0.0159, w=2.8715, b=-1.9533
+
+Final:
+w = 2.903853416442871
+b = -1.971545934677124</code></pre>
+</div>
+</div>
+</section>
+<section id="thanks" class="slide level2">
+<h2>Thanks</h2>
+
+</section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<div class="footer footer-default">
+
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="gradient-descent-flavors+backprop-with-pytorch_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="gradient-descent-flavors+backprop-with-pytorch_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="gradient-descent-flavors+backprop-with-pytorch_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="gradient-descent-flavors+backprop-with-pytorch_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="gradient-descent-flavors+backprop-with-pytorch_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="gradient-descent-flavors+backprop-with-pytorch_files/libs/revealjs/plugin/reveal-chalkboard/plugin.js"></script>
+  <script src="gradient-descent-flavors+backprop-with-pytorch_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="gradient-descent-flavors+backprop-with-pytorch_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="gradient-descent-flavors+backprop-with-pytorch_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="gradient-descent-flavors+backprop-with-pytorch_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="gradient-descent-flavors+backprop-with-pytorch_files/libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"8\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'chalkboard': {"buttons":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: false,
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'none',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, RevealChalkboard, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    <script id="quarto-html-after-body" type="application/javascript">
+      window.document.addEventListener("DOMContentLoaded", function (event) {
+        const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+        tabsets.forEach(function(tabset) {
+          const tabby = new Tabby('#' + tabset.id);
+        });
+        const isCodeAnnotation = (el) => {
+          for (const clz of el.classList) {
+            if (clz.startsWith('code-annotation-')) {                     
+              return true;
+            }
+          }
+          return false;
+        }
+        const onCopySuccess = function(e) {
+          // button target
+          const button = e.trigger;
+          // don't keep focus
+          button.blur();
+          // flash "checked"
+          button.classList.add('code-copy-button-checked');
+          var currentTitle = button.getAttribute("title");
+          button.setAttribute("title", "Copied!");
+          let tooltip;
+          if (window.bootstrap) {
+            button.setAttribute("data-bs-toggle", "tooltip");
+            button.setAttribute("data-bs-placement", "left");
+            button.setAttribute("data-bs-title", "Copied!");
+            tooltip = new bootstrap.Tooltip(button, 
+              { trigger: "manual", 
+                customClass: "code-copy-button-tooltip",
+                offset: [0, -8]});
+            tooltip.show();    
+          }
+          setTimeout(function() {
+            if (tooltip) {
+              tooltip.hide();
+              button.removeAttribute("data-bs-title");
+              button.removeAttribute("data-bs-toggle");
+              button.removeAttribute("data-bs-placement");
+            }
+            button.setAttribute("title", currentTitle);
+            button.classList.remove('code-copy-button-checked');
+          }, 1000);
+          // clear code selection
+          e.clearSelection();
+        }
+        const getTextToCopy = function(trigger) {
+          const outerScaffold = trigger.parentElement.cloneNode(true);
+          const codeEl = outerScaffold.querySelector('code');
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+        }
+        const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+          text: getTextToCopy
+        });
+        clipboard.on('success', onCopySuccess);
+        if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+          const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+            text: getTextToCopy,
+            container: window.document.getElementById('quarto-embedded-source-code-modal')
+          });
+          clipboardModal.on('success', onCopySuccess);
+        }
+          var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+          var mailtoRegex = new RegExp(/^mailto:/);
+            var filterRegex = new RegExp('/' + window.location.host + '/');
+          var isInternal = (href) => {
+              return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+          }
+          // Inspect non-navigation links and adorn them if external
+         var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+          for (var i=0; i<links.length; i++) {
+            const link = links[i];
+            if (!isInternal(link.href)) {
+              // undo the damage that might have been done by quarto-nav.js in the case of
+              // links that we want to consider external
+              if (link.dataset.originalHref !== undefined) {
+                link.href = link.dataset.originalHref;
+              }
+            }
+          }
+        function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+          const config = {
+            allowHTML: true,
+            maxWidth: 500,
+            delay: 100,
+            arrow: false,
+            appendTo: function(el) {
+                return el.closest('section.slide') || el.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'light-border',
+            placement: 'bottom-start',
+          };
+          if (contentFn) {
+            config.content = contentFn;
+          }
+          if (onTriggerFn) {
+            config.onTrigger = onTriggerFn;
+          }
+          if (onUntriggerFn) {
+            config.onUntrigger = onUntriggerFn;
+          }
+            config['offset'] = [0,0];
+            config['maxWidth'] = 700;
+          window.tippy(el, config); 
+        }
+        const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+        for (var i=0; i<noterefs.length; i++) {
+          const ref = noterefs[i];
+          tippyHover(ref, function() {
+            // use id or data attribute instead here
+            let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+            try { href = new URL(href).hash; } catch {}
+            const id = href.replace(/^#\/?/, "");
+            const note = window.document.getElementById(id);
+            if (note) {
+              return note.innerHTML;
+            } else {
+              return "";
+            }
+          });
+        }
+        const findCites = (el) => {
+          const parentEl = el.parentElement;
+          if (parentEl) {
+            const cites = parentEl.dataset.cites;
+            if (cites) {
+              return {
+                el,
+                cites: cites.split(' ')
+              };
+            } else {
+              return findCites(el.parentElement)
+            }
+          } else {
+            return undefined;
+          }
+        };
+        var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+        for (var i=0; i<bibliorefs.length; i++) {
+          const ref = bibliorefs[i];
+          const citeInfo = findCites(ref);
+          if (citeInfo) {
+            tippyHover(citeInfo.el, function() {
+              var popup = window.document.createElement('div');
+              citeInfo.cites.forEach(function(cite) {
+                var citeDiv = window.document.createElement('div');
+                citeDiv.classList.add('hanging-indent');
+                citeDiv.classList.add('csl-entry');
+                var biblioDiv = window.document.getElementById('ref-' + cite);
+                if (biblioDiv) {
+                  citeDiv.innerHTML = biblioDiv.innerHTML;
+                }
+                popup.appendChild(citeDiv);
+              });
+              return popup.innerHTML;
+            });
+          }
+        }
+      });
+      </script>
+    <script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+    (function() {
+      let previousOnload = window.onload;
+      window.onload = () => {
+        if (previousOnload) {
+          previousOnload();
+        }
+        lightboxQuarto.on('slide_before_load', (data) => {
+          const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+          const href = trigger.getAttribute('href');
+          if (href !== null) {
+            const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+            if (imgEl !== null) {
+              const srcAttr = imgEl.getAttribute("src");
+              if (srcAttr && srcAttr.startsWith("data:")) {
+                slideConfig.href = srcAttr;
+              }
+            }
+          } 
+        });
+      
+        lightboxQuarto.on('slide_after_load', (data) => {
+          const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(slideNode);
+          }
+        });
+      
+      };
+      
+    })();
+              </script>
+    
+
+</body></html>

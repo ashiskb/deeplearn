@@ -30,3 +30,7 @@ Some course materials for another semester of Deep Learning course
 
 ## Week 4 (9/08 -- 9/11), excluding 9/7 for the Labor day holiday
 * Some coding examples, and the regression task with PyTorch [lecture slide](week-04/couple-of-scenarios-and-codes.html)
+
+
+## Week 5 (09/14 -- 09/18)
+* Flavors of Gradient Descent and somewhat detailed orientation to PyTorch Compute Framework [ lecture slide ](week-05/gradient-descent-flavors+backprop-with-pytorch.html)
